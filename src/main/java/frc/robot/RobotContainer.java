@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -8,10 +7,11 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
@@ -37,7 +37,9 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton aimRobotAtTag = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton aimRobotAtLeftPole = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton positionRobotAtTag = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton aimRobotAtLeftPole2 = new JoystickButton(driver, XboxController.Button.kStart.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -47,6 +49,9 @@ public class RobotContainer {
     private static NetworkTableEntry ty = table.getEntry("ty");
     private static NetworkTableEntry tx = table.getEntry("tx");
 
+    /* Autonomous commands */
+    private Command m_auto1 = new Autonomous1(s_Swerve);
+    private Command m_autoExample = new exampleAuto(s_Swerve);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -65,6 +70,14 @@ public class RobotContainer {
 
         SmartDashboard.putNumber("tx", tx.getDouble(0.0));
         SmartDashboard.putNumber("ty", ty.getDouble(0.0));
+
+        // A chooser for autonomous commands
+        SendableChooser<Command> m_chooser = new SendableChooser<>();
+        m_chooser.setDefaultOption("Exampe", m_autoExample);
+        m_chooser.addOption("Autonomous1", m_auto1);
+
+        // Put the chooser on the dashboard
+        SmartDashboard.putData(m_chooser);
     }
 
     /**
@@ -77,21 +90,21 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-        aimRobotAtTag.whileTrue(new PIDCommand(
-            new PIDController(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD), 
-            () -> tx.getDouble(0.0), 
-            0, 
-            (output) -> s_Swerve.drive(new Translation2d(0, output), 0, false, false), 
-            s_Swerve));
+        //A Button
+        aimRobotAtTag.onTrue(new AimSwerveAtTagCommand(tx, 0.0, s_Swerve));
 
-        /*
-        positionRobotAtTag.onTrue(new PIDCommand(
-            new PIDController(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD), 
-            () -> ty.getDouble(0.0), 
-            1, 
-            (output) -> s_Swerve.drive(new Translation2d(output, 0.0), 0, false, false), 
-            s_Swerve));
-            */
+        //B Button
+        positionRobotAtTag.onTrue(new PositionSwerveAtTag(ty, s_Swerve));
+
+        //X Button
+        aimRobotAtLeftPole.onTrue(new SequentialCommandGroup(
+            new AimSwerveAtTagCommand(tx, 0.0, s_Swerve),
+            new InstantCommand(() -> s_Swerve.drive(new Translation2d(-1.0, 0.0), 0, false, false))
+        ));
+
+        //Start Button
+        aimRobotAtLeftPole2.onTrue(new AimSwerveAtTagCommand(tx, 1.0, s_Swerve));
+
     }
 
     /**
