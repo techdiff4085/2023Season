@@ -19,7 +19,7 @@ public class AimSwerveAtTagCommand extends PIDCommand{
 
     public static PIDController makePIDController(){
         PIDController controller = new PIDController(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD);
-        controller.setTolerance(0.05);
+        controller.setTolerance(1);
         return controller;
     }
 
