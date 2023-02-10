@@ -50,6 +50,7 @@ public class RobotContainer {
     /* Autonomous commands */
     private Command m_auto1 = new Autonomous1(s_Swerve);
     private Command m_autoExample = new exampleAuto(s_Swerve);
+    private Command m_PathPlannerAuto2 = new PathPlannerAuto2(s_Swerve);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -74,11 +75,13 @@ public class RobotContainer {
 
         // A chooser for autonomous commands
         SendableChooser<Command> m_chooser = new SendableChooser<>();
-        m_chooser.setDefaultOption("Exampe", m_autoExample);
+        m_chooser.setDefaultOption("PathPlannerAuto2", m_PathPlannerAuto2);
+        m_chooser.addOption("Example", m_autoExample);
         m_chooser.addOption("Autonomous1", m_auto1);
-
+        
         // Put the chooser on the dashboard
-        SmartDashboard.putData(m_chooser);
+        SmartDashboard.putData("Autonomous choices", m_chooser);
+
     }
 
     /**
