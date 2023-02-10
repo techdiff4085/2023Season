@@ -21,12 +21,13 @@ public class Autonomous1 extends SequentialCommandGroup {
     public Autonomous1(Swerve s_Swerve){
         TrajectoryConfig config =
             new TrajectoryConfig(
-                    Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                    //Good Speed is 8 
+                    8,
                     Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(Constants.Swerve.swerveKinematics);
 
         // An example trajectory to follow.  All units in meters.
-        Trajectory exampleTrajectory =
+        Trajectory exampleTrajectory1 =
             TrajectoryGenerator.generateTrajectory(
                 // Start at the origin facing the +X direction
                 new Pose2d(0, 0, new Rotation2d(0)),
@@ -34,15 +35,28 @@ public class Autonomous1 extends SequentialCommandGroup {
                 // 4 should be 18.8
                 
                 List.of(
-                    new Translation2d(Units.feetToMeters(-5), 0.25), 
-                    new Translation2d(Units.feetToMeters(4), 0.25),
-                    new Translation2d(Units.feetToMeters(-4), 0.25)
-
+                    new Translation2d(Units.feetToMeters(0), Units.feetToMeters(11))
                 ), 
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(Units.feetToMeters(-4), 0, new Rotation2d(0)),
+                // good feetToMeters is 29 to get on charge station
+                new Pose2d(Units.feetToMeters(67), Units.feetToMeters(11), new Rotation2d(0)),
                 config);
 
+        Trajectory exampleTrajectory2 =
+                TrajectoryGenerator.generateTrajectory(
+                    // Start at the origin facing the +X direction
+                    new Pose2d(0, 0, new Rotation2d(0)),
+                    // Pass through these two interior waypoints, making an 's' curve path
+                    // 4 should be 18.8
+                    
+                    List.of(
+                        new Translation2d(Units.feetToMeters(0), Units.feetToMeters(-4))
+                ), 
+                    // End 3 meters straight ahead of where we started, facing forward
+                    // good feetToMeters is 29 to get on charge station
+                    new Pose2d(Units.feetToMeters(0), Units.feetToMeters(-8), new Rotation2d(0)),
+                    config);                
+           
         var thetaController =
             new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -50,7 +64,7 @@ public class Autonomous1 extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand =
             new SwerveControllerCommand(
-                exampleTrajectory,
+                exampleTrajectory1.concatenate(exampleTrajectory2),
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -61,7 +75,7 @@ public class Autonomous1 extends SequentialCommandGroup {
 
 
         addCommands(
-            new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
+            new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory1.getInitialPose())),
             swerveControllerCommand
         );
     }

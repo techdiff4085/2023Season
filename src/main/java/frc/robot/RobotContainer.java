@@ -36,7 +36,9 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton aimRobotAtTag = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton positionRobotAtTag = new JoystickButton(driver, XboxController.Button.kB.value);
-
+    private final JoystickButton positionRobotAtTag2 = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton positionRobotAtTag3 = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton positionRobotAtTag4 = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
 
@@ -51,6 +53,9 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+
+       // Limelight.getInstance();
+
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -91,6 +96,15 @@ public class RobotContainer {
 
         //B Button
         positionRobotAtTag.onTrue(new MoveRobotCommand(s_Swerve));
+
+        //X Button
+        positionRobotAtTag2.onTrue(new ReverseRobotCommand(s_Swerve));
+
+        //Y Button
+        positionRobotAtTag3.onTrue(new ForwardRobotCommand(s_Swerve));
+
+        //Start Button
+        positionRobotAtTag4.onTrue(new BackwardRobotCommand(s_Swerve));
 
     }
 
