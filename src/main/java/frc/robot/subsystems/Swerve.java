@@ -111,6 +111,10 @@ public class Swerve extends SubsystemBase {
             mod.resetToAbsolute();
         }
     }
+    public void resetPose(Pose2d pose) {
+        // DKT -- fix this later
+        //poseEstimator.resetPosition(getYaw(), getPositions(), pose);
+    }
 
     @Override
     public void periodic(){

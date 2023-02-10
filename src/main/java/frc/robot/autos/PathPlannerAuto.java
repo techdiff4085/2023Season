@@ -26,10 +26,10 @@ import frc.robot.RobotContainer;
 // import vendor libaray --- 
 
 public final class PathPlannerAuto {
-// /* */
-    /**
-     * Events to be used in all Autos built with pathplanner
-     */
+ /* 
+    //
+    // Events to be used in all Autos built with pathplanner
+    //
     private static final Map<String, Command> eventMap = new HashMap<>(Map.ofEntries(
         Map.entry("example1", Commands.print("Example 1 triggered")),
         Map.entry("example2", Commands.print("Example 2 triggered")),
@@ -112,5 +112,5 @@ public final class PathPlannerAuto {
     public static Command none(){
         return Commands.none();
     }
-//*/
+*/
 }
