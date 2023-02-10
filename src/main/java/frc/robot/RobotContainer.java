@@ -38,7 +38,7 @@ public class RobotContainer {
     private final JoystickButton positionRobotAtTag = new JoystickButton(driver, XboxController.Button.kB.value);
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+    public static final Swerve s_Swerve = new Swerve();
 
     /* Limelight */
     private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
