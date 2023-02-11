@@ -48,9 +48,10 @@ public class RobotContainer {
     private static NetworkTableEntry tx = table.getEntry("tx");
 
     /* Autonomous commands */
-    private Command m_auto1 = new Autonomous1(s_Swerve);
-    private Command m_autoExample = new exampleAuto(s_Swerve);
+    //private Command m_auto1 = new Autonomous1(s_Swerve);
+    //private Command m_autoExample = new exampleAuto(s_Swerve);
     private Command m_PathPlannerAuto2 = new PathPlannerAuto2(s_Swerve);
+    private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -74,10 +75,10 @@ public class RobotContainer {
         SmartDashboard.putNumber("ty", ty.getDouble(0.0));
 
         // A chooser for autonomous commands
-        SendableChooser<Command> m_chooser = new SendableChooser<>();
+        
         m_chooser.setDefaultOption("PathPlannerAuto2", m_PathPlannerAuto2);
-        m_chooser.addOption("Example", m_autoExample);
-        m_chooser.addOption("Autonomous1", m_auto1);
+        //m_chooser.addOption("Example", m_autoExample);
+        //m_chooser.addOption("Autonomous1", m_auto1);
         
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);
@@ -118,6 +119,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new Autonomous1(s_Swerve);
+        return m_chooser.getSelected();
+
     }
 }

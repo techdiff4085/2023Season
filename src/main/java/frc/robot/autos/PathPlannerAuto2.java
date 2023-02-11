@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -22,7 +23,7 @@ public class PathPlannerAuto2 extends SequentialCommandGroup {
     //Exclude ".path" from pathName
     PathPlannerTrajectory trajectory = PathPlanner.loadPath("MoveBackwards Copy", AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared);
-    System.out.println("Trajectory is " + trajectory.toString());
+    SmartDashboard.putString("Trajectory is ", trajectory.toString());
     PPSwerveControllerCommand swerveControllerCommand = new PPSwerveControllerCommand(
         trajectory,
         swerve::getPose,
@@ -34,7 +35,7 @@ public class PathPlannerAuto2 extends SequentialCommandGroup {
         true,
         swerve);
 
-    // swerve.setFieldTrajectory("Trajectory", trajectory);
+   //swerve.setFieldTrajectory("Trajectory", trajectory);
 
     // change the lambda to an external command or state it outside the runOnce function
     addCommands(new InstantCommand(() -> {

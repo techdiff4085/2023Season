@@ -19,6 +19,7 @@ import frc.robot.subsystems.Swerve;
 
 public class Autonomous1 extends SequentialCommandGroup {
     public Autonomous1(Swerve s_Swerve){
+       
         TrajectoryConfig config =
             new TrajectoryConfig(
                     //Good Speed is 8 
@@ -78,5 +79,7 @@ public class Autonomous1 extends SequentialCommandGroup {
             new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory1.getInitialPose())),
             swerveControllerCommand
         );
+
+        
     }
 }
