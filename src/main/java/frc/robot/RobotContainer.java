@@ -1,5 +1,8 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.music.Orchestra;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -25,6 +28,8 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick armController = new Joystick(1);
+
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -39,6 +44,10 @@ public class RobotContainer {
     private final JoystickButton positionRobotAtTag2 = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton positionRobotAtTag3 = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     private final JoystickButton positionRobotAtTag4 = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+
+    //play music
+    private final JoystickButton playMusicButton = new JoystickButton(armController, XboxController.Button.kA.value);
+
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
 
@@ -52,6 +61,7 @@ public class RobotContainer {
     //private Command m_autoExample = new exampleAuto(s_Swerve);
     private Command m_PathPlannerAuto2 = new PathPlannerAuto2(s_Swerve);
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -77,6 +87,7 @@ public class RobotContainer {
         // A chooser for autonomous commands
         
         m_chooser.setDefaultOption("PathPlannerAuto2", m_PathPlannerAuto2);
+        
         //m_chooser.addOption("Example", m_autoExample);
         //m_chooser.addOption("Autonomous1", m_auto1);
         
@@ -110,6 +121,7 @@ public class RobotContainer {
         //Start Button
         positionRobotAtTag4.onTrue(new BackwardRobotCommand(s_Swerve));
 
+        
     }
 
     /**
@@ -121,5 +133,18 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         return m_chooser.getSelected();
 
+    }
+    public void PlayMusic(String Filename){
+        Orchestra orchestra = new Orchestra();
+        orchestra.loadMusic(Filename);
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.driveMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.driveMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.angleMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.driveMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID,"Carnie"));
+        orchestra.play();
     }
 }

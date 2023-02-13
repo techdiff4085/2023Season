@@ -71,7 +71,16 @@ public class Swerve extends SubsystemBase {
         
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+            //desiredStates[mod.moduleNumber].speedMetersPerSecond = Math.abs(desiredStates[mod.moduleNumber].getDriveVelocity());   
         }
+        //dkt - test this out after 2/11
+        //desiredStates[0].speedMetersPerSecond = Math.abs(m_frontLeftModule.getDriveVelocity());
+        //desiredStates[1].speedMetersPerSecond = Math.abs(m_frontRightModule.getDriveVelocity());
+        //desiredStates[2].speedMetersPerSecond = Math.abs(m_backLeftModule.getDriveVelocity());
+        //desiredStates[3].speedMetersPerSecond = Math.abs(m_backRightModule.getDriveVelocity());
+        //swerveOdometry.update(getGyroscopeRotation(), desiredStates);
+        //https://github.com/5804/rapidReact2022Alpha/tree/f919742a8a5a3f2b0531bf845e8df870fbbffc71
+        //https://www.chiefdelphi.com/t/autonomous-consistency-with-swerve-drive/403549
     }    
 
     public Pose2d getPose() {

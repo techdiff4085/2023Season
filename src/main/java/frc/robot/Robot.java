@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -21,6 +22,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private String musicfile;
+  private final SendableChooser<String> Music_Chooser = new SendableChooser<>();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -31,6 +34,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    //Music_Chooser.setDefaultOption("MissionImpossible", "MissionImpossible.chrp");
+    //Music_Chooser.setDefaultOption("Eye of the tiger", "EyeOfTheTiger.chrp");
+    Music_Chooser.setDefaultOption("Song 2", "song3.chrp");
+    
   }
 
   /**
@@ -90,6 +98,10 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+
+    musicfile = Music_Chooser.getSelected();
+    m_robotContainer.PlayMusic(musicfile);
+
   }
 
   /** This function is called periodically during test mode. */
