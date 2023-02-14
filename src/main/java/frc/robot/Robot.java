@@ -36,8 +36,8 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     //Music_Chooser.setDefaultOption("MissionImpossible", "MissionImpossible.chrp");
-    //Music_Chooser.setDefaultOption("Eye of the tiger", "EyeOfTheTiger.chrp");
-    Music_Chooser.setDefaultOption("Song 2", "song3.chrp");
+    Music_Chooser.setDefaultOption("Eye of the tiger", "Sabotage.chrp");
+    //Music_Chooser.setDefaultOption("Song 2", "song3.chrp");
     
   }
 

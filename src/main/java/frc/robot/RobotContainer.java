@@ -57,10 +57,11 @@ public class RobotContainer {
     private static NetworkTableEntry tx = table.getEntry("tx");
 
     /* Autonomous commands */
-    //private Command m_auto1 = new Autonomous1(s_Swerve);
+    private Command m_auto1 = new Autonomous1(s_Swerve);
     //private Command m_autoExample = new exampleAuto(s_Swerve);
     private Command m_PathPlannerAuto2 = new PathPlannerAuto2(s_Swerve);
     private Command m_PathPlannerAuto3 = new PathPlannerAuto3(s_Swerve);
+    private Command m_PathPlannerAuto4 = new PathPlannerAuto4(s_Swerve);
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 
@@ -88,9 +89,9 @@ public class RobotContainer {
         // A chooser for autonomous commands
         
         m_chooser.addOption("PathPlannerAuto2", m_PathPlannerAuto2);
-        
-        m_chooser.setDefaultOption("Spinny Spin", m_PathPlannerAuto3);
-        //m_chooser.addOption("Autonomous1", m_auto1);
+        m_chooser.addOption("Spinny Spin", m_PathPlannerAuto3);
+        m_chooser.addOption("MeasureDistance", m_PathPlannerAuto4);
+        m_chooser.setDefaultOption("Autonomous1", m_auto1);
         
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);
@@ -139,14 +140,15 @@ public class RobotContainer {
     public void PlayMusic(String Filename){
         Orchestra orchestra = new Orchestra();
         orchestra.loadMusic(Filename);
-        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID,"Carnie"));
+        //orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.driveMotorID,"Carnie"));
-        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID,"Carnie"));
+        //orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.driveMotorID,"Carnie"));
-        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.angleMotorID,"Carnie"));
+        //orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.driveMotorID,"Carnie"));
-        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID,"Carnie"));
+       // orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID,"Carnie"));
         orchestra.play();
+        
     }
 }

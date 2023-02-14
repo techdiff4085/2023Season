@@ -36,11 +36,11 @@ public class Autonomous1 extends SequentialCommandGroup {
                 // 4 should be 18.8
                 
                 List.of(
-                    new Translation2d(Units.feetToMeters(0), Units.feetToMeters(11))
+                    new Translation2d(Units.feetToMeters(-10), Units.feetToMeters(0))
                 ), 
                 // End 3 meters straight ahead of where we started, facing forward
                 // good feetToMeters is 29 to get on charge station
-                new Pose2d(Units.feetToMeters(67), Units.feetToMeters(11), new Rotation2d(0)),
+                new Pose2d(Units.feetToMeters(0), Units.feetToMeters(1), new Rotation2d(0)),
                 config);
 
         Trajectory exampleTrajectory2 =
@@ -65,7 +65,7 @@ public class Autonomous1 extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand =
             new SwerveControllerCommand(
-                exampleTrajectory1.concatenate(exampleTrajectory2),
+                exampleTrajectory1,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
