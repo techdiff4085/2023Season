@@ -88,10 +88,10 @@ public class RobotContainer {
 
         // A chooser for autonomous commands
         
-        m_chooser.addOption("PathPlannerAuto2", m_PathPlannerAuto2);
-        m_chooser.addOption("Spinny Spin", m_PathPlannerAuto3);
-        m_chooser.addOption("MeasureDistance", m_PathPlannerAuto4);
-        m_chooser.setDefaultOption("Autonomous1", m_auto1);
+        m_chooser.addOption("MiddleAuto", m_PathPlannerAuto2);
+        m_chooser.addOption("Blue1Auto", m_PathPlannerAuto3);
+        m_chooser.setDefaultOption("Blue3Auto", m_PathPlannerAuto4);
+        m_chooser.addOption("Autonomous1", m_auto1);
         
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);

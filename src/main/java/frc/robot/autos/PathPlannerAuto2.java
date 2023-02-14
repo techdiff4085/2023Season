@@ -21,7 +21,7 @@ public class PathPlannerAuto2 extends SequentialCommandGroup {
 
   public PathPlannerAuto2(Swerve swerve) {
     //Exclude ".path" from pathName
-    PathPlannerTrajectory trajectory = PathPlanner.loadPath("MoveBackwards Copy", AutoConstants.kMaxSpeedMetersPerSecond,
+    PathPlannerTrajectory trajectory = PathPlanner.loadPath("MiddleAuto", AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared);
     SmartDashboard.putString("Trajectory is ", trajectory.toString());
     PPSwerveControllerCommand swerveControllerCommand = new PPSwerveControllerCommand(
