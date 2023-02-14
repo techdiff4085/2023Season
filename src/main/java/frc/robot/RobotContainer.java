@@ -41,9 +41,8 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton aimRobotAtTag = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton positionRobotAtTag = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton positionRobotAtTag2 = new JoystickButton(driver, XboxController.Button.kX.value);
-    private final JoystickButton positionRobotAtTag3 = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton positionRobotAtTag4 = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton balanceRobot = new JoystickButton(driver, XboxController.Button.kX.value);
+
 
     //play music
     private final JoystickButton playMusicButton = new JoystickButton(armController, XboxController.Button.kA.value);
@@ -115,13 +114,9 @@ public class RobotContainer {
         positionRobotAtTag.onTrue(new MoveRobotCommand(s_Swerve));
 
         //X Button
-        positionRobotAtTag2.onTrue(new ReverseRobotCommand(s_Swerve));
+        balanceRobot.onTrue(new BalanceCommand(s_Swerve));
 
-        //Y Button
-        positionRobotAtTag3.onTrue(new ForwardRobotCommand(s_Swerve));
 
-        //Start Button
-        positionRobotAtTag4.onTrue(new BackwardRobotCommand(s_Swerve));
 
         
     }
