@@ -89,8 +89,8 @@ public class RobotContainer {
         
         m_chooser.addOption("MiddleAuto", m_PathPlannerAuto2);
         m_chooser.addOption("Blue1Auto", m_PathPlannerAuto3);
-        m_chooser.setDefaultOption("Blue3Auto", m_PathPlannerAuto4);
-        m_chooser.addOption("Autonomous1", m_auto1);
+        m_chooser.addOption("Blue3Auto", m_PathPlannerAuto4);
+        m_chooser.setDefaultOption("Autonomous1", m_auto1);
         
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);

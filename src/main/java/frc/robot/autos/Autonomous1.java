@@ -36,11 +36,12 @@ public class Autonomous1 extends SequentialCommandGroup {
                 // 4 should be 18.8
                 
                 List.of(
-                    new Translation2d(Units.feetToMeters(-10), Units.feetToMeters(0))
+                    new Translation2d(13.5, Units.feetToMeters(0))
+
                 ), 
                 // End 3 meters straight ahead of where we started, facing forward
                 // good feetToMeters is 29 to get on charge station
-                new Pose2d(Units.feetToMeters(0), Units.feetToMeters(1), new Rotation2d(0)),
+                new Pose2d(-11, Units.feetToMeters(1), new Rotation2d(0)),
                 config);
 
         Trajectory exampleTrajectory2 =
