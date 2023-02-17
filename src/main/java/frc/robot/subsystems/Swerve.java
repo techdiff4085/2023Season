@@ -24,9 +24,8 @@ public class Swerve extends SubsystemBase {
     public Pigeon2 gyro;
 
     public Swerve() {
-        gyro = new Pigeon2(Constants.Swerve.pigeonID);
+        gyro = new Pigeon2(Constants.Swerve.pigeonID,"Carnie");
         gyro.configFactoryDefault();
-        zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -39,7 +38,7 @@ public class Swerve extends SubsystemBase {
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
          */
         Timer.delay(1.0);
-        resetModulesToAbsolute();
+        zeroGyro();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
     }
@@ -109,10 +108,15 @@ public class Swerve extends SubsystemBase {
 
     public void zeroGyro(){
         gyro.setYaw(0);
+        resetModulesToAbsolute();
     }
 
     public double getPitch(){
         return gyro.getPitch();
+    }
+
+    public double getRoll(){
+        return gyro.getRoll();
     }
 
     public Rotation2d getYaw() {
