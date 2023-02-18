@@ -1,4 +1,30 @@
-**Note: In 2023, there was an [issue](https://github.com/Team364/BaseFalconSwerve/issues/8) that prevented this code from working with MK4i's (or any module that used inverted motors). A [fix](https://github.com/Team364/BaseFalconSwerve/issues/8#issuecomment-1384799539) has been found, tested on a real robot, and this issue is believed to have been fixed as of 1/17. If anyone experiences any further issues, please report them. Thanks**
+# Build Notes</br>
+
+Upper Arm
+1. 	Left motor controls upper arm
+2. 	Limit switch #1 is the stopping point for the 1st pole/box
+		TODO: we’ll have to figure out the angle for the lower arm. Use the motor encoder.
+3. 	Limit switch #2 moves the upper arm inside the perimeter of the robot for drive mode
+		Assume the lower arm is completely down
+4. 	Limit switch #3 is the stopping point for the 2nd pole/box
+		TODO: we’ll have to figure out the angle for the lower arm. Use the motor encoder.
+5. 	Upper right limit switch is the stopping point for the upper arm – moving down
+
+Lower Arm
+1.	Right motor controls the lower arm
+2. 	Upper left rear switch is the stopping point for the lower arm when moving down
+3. 	Upper left front switch is the stopping point for the lower arm when moving up
+
+# Programming to-do list </br>
+
+1. Create another command to level the robot manually -- this will be needed in a scenario where we're on the charging station first and another robot attempts to join. If they get stuck and the charging station doesn't balance, then we need the ability to stay on. If we attempt to use the full "auto level" command, then we'll fall off the other side as the charging station will never balance. 
+2. Autonomous 1
+3. Autonomous 2 
+4. Autonomous 3
+5. Autonomous 4
+6. Autonomous 5
+
+
 
 # BaseFalconSwerve </br>
 

@@ -42,8 +42,9 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton aimRobotAtTag = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton positionRobotAtTag = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton balanceRobot = new JoystickButton(driver, XboxController.Button.kX.value);
-
+    private final JoystickButton positionRobotAtTag2 = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton positionRobotAtTag3 = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton positionRobotAtTag4 = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     //play music
     private final JoystickButton playMusicButton = new JoystickButton(armController, XboxController.Button.kA.value);
@@ -57,7 +58,7 @@ public class RobotContainer {
     private static NetworkTableEntry tx = table.getEntry("tx");
 
     /* Autonomous commands */
-    private Command m_auto1 = new Autonomous1(s_Swerve);
+    //private Command m_auto1 = new Autonomous1(s_Swerve);
     //private Command m_autoExample = new exampleAuto(s_Swerve);
     private Command m_PathPlannerAuto2 = new SequentialCommandGroup(
         new PathPlannerAuto2(s_Swerve),
@@ -72,7 +73,7 @@ public class RobotContainer {
     public RobotContainer() {
 
        // Limelight.getInstance();
-
+       
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -91,10 +92,10 @@ public class RobotContainer {
 
         // A chooser for autonomous commands
         
-        m_chooser.addOption("MiddleAuto", m_PathPlannerAuto2);
-        m_chooser.addOption("Blue1Auto", m_PathPlannerAuto3);
-        m_chooser.addOption("Blue3Auto", m_PathPlannerAuto4);
-        m_chooser.setDefaultOption("Autonomous1", m_auto1);
+        m_chooser.addOption("PathPlannerAuto2", m_PathPlannerAuto2);
+        
+        m_chooser.setDefaultOption("Spinny Spin", m_PathPlannerAuto3);
+        //m_chooser.addOption("Autonomous1", m_auto1);
         
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);
@@ -118,9 +119,13 @@ public class RobotContainer {
         positionRobotAtTag.onTrue(new MoveRobotCommand(s_Swerve));
 
         //X Button
-        balanceRobot.onTrue(new BalanceCommand(s_Swerve));
+        positionRobotAtTag2.onTrue(new ReverseRobotCommand(s_Swerve));
 
+        //Y Button
+        positionRobotAtTag3.onTrue(new ForwardRobotCommand(s_Swerve));
 
+        //Start Button
+        positionRobotAtTag4.onTrue(new BackwardRobotCommand(s_Swerve));
 
         
     }
@@ -139,15 +144,14 @@ public class RobotContainer {
     public void PlayMusic(String Filename){
         Orchestra orchestra = new Orchestra();
         orchestra.loadMusic(Filename);
-        //orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.driveMotorID,"Carnie"));
-        //orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.driveMotorID,"Carnie"));
-        //orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.angleMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.driveMotorID,"Carnie"));
-       // orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID,"Carnie"));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID,"Carnie"));
         orchestra.play();
-        
     }
 }
