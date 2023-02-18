@@ -1,18 +1,19 @@
 **Build Notes:
+
 Upper Arm
-	Left motor controls upper arm
-	Limit switch #1 is the stopping point for the 1st pole/box
+1. 	Left motor controls upper arm
+2. 	Limit switch #1 is the stopping point for the 1st pole/box
 		TODO: we’ll have to figure out the angle for the lower arm. Use the motor encoder.
-	Limit switch #2 moves the upper arm inside the perimeter of the robot for drive mode
+3. 	Limit switch #2 moves the upper arm inside the perimeter of the robot for drive mode
 		Assume the lower arm is completely down
-	Limit switch #3 is the stopping point for the 2nd pole/box
+4. 	Limit switch #3 is the stopping point for the 2nd pole/box
 		TODO: we’ll have to figure out the angle for the lower arm. Use the motor encoder.
-Upper right limit switch is the stopping point for the upper arm – moving down
+5. 	Upper right limit switch is the stopping point for the upper arm – moving down
 
 Lower Arm
-	Right motor controls the lower arm
-Upper left rear switch is the stopping point for the lower arm when moving down
-Upper left front switch is the stopping point for the lower arm when moving up
+1.	Right motor controls the lower arm
+2. 	Upper left rear switch is the stopping point for the lower arm when moving down
+3. 	Upper left front switch is the stopping point for the lower arm when moving up
 
 
 
