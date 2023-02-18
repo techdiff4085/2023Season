@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
@@ -26,6 +27,8 @@ public class BalanceCommand extends CommandBase {
     @Override
     public void execute() {
       this.currentAngle = m_Swerve.getPitch();
+
+      SmartDashboard.putNumber("Pitch", currentAngle);
   
       error = -currentAngle;
       drivePower = -Math.min(Constants.Swerve.balanceDriveKP * error, 1);
@@ -41,7 +44,7 @@ public class BalanceCommand extends CommandBase {
         drivePower = Math.copySign(0.4, drivePower);
       }
   
-      m_Swerve.drive(new Translation2d(0.01, 0.0), 0.0, false, false);
+      m_Swerve.drive(new Translation2d(0.00, 0.001), 0.0, false, false);
       
       // Debugging Print Statments
       System.out.println("Current Angle: " + currentAngle);
@@ -52,7 +55,7 @@ public class BalanceCommand extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-      m_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, false);
+      //m_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, false);
     }
   
     // Returns true when the command should end.
