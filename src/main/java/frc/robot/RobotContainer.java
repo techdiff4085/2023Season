@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
@@ -59,7 +60,10 @@ public class RobotContainer {
     /* Autonomous commands */
     //private Command m_auto1 = new Autonomous1(s_Swerve);
     //private Command m_autoExample = new exampleAuto(s_Swerve);
-    private Command m_PathPlannerAuto2 = new PathPlannerAuto2(s_Swerve);
+    private Command m_PathPlannerAuto2 = new SequentialCommandGroup(
+        new PathPlannerAuto2(s_Swerve),
+        new BalanceCommand(s_Swerve)
+    );
     private Command m_PathPlannerAuto3 = new PathPlannerAuto3(s_Swerve);
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -75,7 +79,7 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis)/2, 
                 () -> -driver.getRawAxis(strafeAxis)/2, 
                 () -> -driver.getRawAxis(rotationAxis)/2, 
-                () -> robotCentric.getAsBoolean()
+                () -> true
             )
         );
 
@@ -104,7 +108,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        /* Driver Buttons */
+        //Y Button
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
         //A Button
