@@ -64,7 +64,7 @@ public class RobotContainer {
         new PathPlannerAuto2(s_Swerve),
         new BalanceCommand(s_Swerve)
     );
-    private Command m_PathPlannerAuto3 = new Blue1Auto(s_Swerve);
+    private Command m_PathPlannerBlueAuto1 = new Blue1Auto(s_Swerve);
     private Command m_PathPlannerAuto4 = new PathPlannerAuto4(s_Swerve);
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -93,9 +93,9 @@ public class RobotContainer {
         // A chooser for autonomous commands
         
         m_chooser.addOption("PathPlannerAuto2", m_PathPlannerAuto2);
+        m_chooser.setDefaultOption("Blue Auto 1", m_PathPlannerBlueAuto1);
         
-        m_chooser.setDefaultOption("Spinny Spin", m_PathPlannerAuto3);
-        //m_chooser.addOption("Autonomous1", m_auto1);
+        //m_chooser.setDefaultOption("Spinny Spin", m_PathPlannerAuto3);
         
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);
