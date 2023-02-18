@@ -1,3 +1,24 @@
+**Build Notes:
+Upper Arm
+	Left motor controls upper arm
+	Limit switch #1 is the stopping point for the 1st pole/box
+		TODO: we’ll have to figure out the angle for the lower arm. Use the motor encoder.
+	Limit switch #2 moves the upper arm inside the perimeter of the robot for drive mode
+		Assume the lower arm is completely down
+	Limit switch #3 is the stopping point for the 2nd pole/box
+		TODO: we’ll have to figure out the angle for the lower arm. Use the motor encoder.
+Upper right limit switch is the stopping point for the upper arm – moving down
+
+Lower Arm
+	Right motor controls the lower arm
+Upper left rear switch is the stopping point for the lower arm when moving down
+Upper left front switch is the stopping point for the lower arm when moving up
+
+
+
+
+
+
 **Note: In 2023, there was an [issue](https://github.com/Team364/BaseFalconSwerve/issues/8) that prevented this code from working with MK4i's (or any module that used inverted motors). A [fix](https://github.com/Team364/BaseFalconSwerve/issues/8#issuecomment-1384799539) has been found, tested on a real robot, and this issue is believed to have been fixed as of 1/17. If anyone experiences any further issues, please report them. Thanks**
 
 # BaseFalconSwerve </br>
