@@ -63,7 +63,7 @@ public class RobotContainer {
         new PathPlannerAuto2(s_Swerve),
         new BalanceCommand(s_Swerve)
     );
-    private Command m_PathPlannerAuto3 = new PathPlannerAuto3(s_Swerve);
+    private Command m_PathPlannerAuto3 = new Blue1Auto(s_Swerve);
     private Command m_PathPlannerAuto4 = new PathPlannerAuto4(s_Swerve);
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 

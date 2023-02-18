@@ -17,9 +17,9 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
-public class PathPlannerAuto3 extends SequentialCommandGroup {
+public class Blue1Auto extends SequentialCommandGroup {
 
-  public PathPlannerAuto3(Swerve swerve) {
+  public Blue1Auto(Swerve swerve) {
     //Exclude ".path" from pathName
     PathPlannerTrajectory trajectory = PathPlanner.loadPath("Blue1Auto", AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared);
@@ -28,8 +28,8 @@ public class PathPlannerAuto3 extends SequentialCommandGroup {
         trajectory,
         swerve::getPose,
         Constants.Swerve.swerveKinematics,
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
+        new PIDController(AutoConstants.kPXController, 0.15, 0),
+        new PIDController(AutoConstants.kPYController, 0.15, 0),
         new PIDController(AutoConstants.kPThetaController, 0, 0),
         swerve::setModuleStates,
         true,
@@ -43,6 +43,9 @@ public class PathPlannerAuto3 extends SequentialCommandGroup {
     }, swerve), new InstantCommand(() -> {
       swerve.resetPose(trajectory.getInitialHolonomicPose());
     }, swerve),
-        swerveControllerCommand);
+        swerveControllerCommand,
+        new InstantCommand(() -> {
+          SmartDashboard.putString("pose", swerve.getPose().toString());
+        } ));
   }
 }
