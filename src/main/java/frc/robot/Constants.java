@@ -76,6 +76,12 @@ public final class Constants {
 
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
+        /* https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/feedforward.html
+        The passed-in gains must have units consistent with the distance units, 
+        or a compile-time error will be thrown. 
+        kS should have units of volts, 
+        kV should have units of volts * seconds / distance, and 
+        kA should have units of volts * seconds^2 / distance */
         public static final double driveKS = (0.4 / 12); //This must be tuned to specific robot
         public static final double driveKV = (1.51 / 12);
         public static final double driveKA = (0.27 / 12);
