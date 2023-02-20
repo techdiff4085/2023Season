@@ -28,7 +28,8 @@ public class Swerve extends SubsystemBase {
     private SwerveDrivePoseEstimator m_poseEstimator;
 
     public Swerve() {
-        gyro = new Pigeon2(Constants.Swerve.pigeonID,"Carnie");
+        //gyro = new Pigeon2(Constants.Swerve.pigeonID,"Carnie");
+        gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
 
         mSwerveMods = new SwerveModule[] {
@@ -136,7 +137,7 @@ public class Swerve extends SubsystemBase {
     }
     public void resetPose(Pose2d pose) {
         
-        m_poseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
+        //m_poseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
     }
 
     @Override

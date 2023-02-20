@@ -144,6 +144,7 @@ public class RobotContainer {
     public void PlayMusic(String Filename){
         Orchestra orchestra = new Orchestra();
         orchestra.loadMusic(Filename);
+        /*
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.driveMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID,"Carnie"));
@@ -152,6 +153,15 @@ public class RobotContainer {
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.driveMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID,"Carnie"));
+        */
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.driveMotorID));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.driveMotorID));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.angleMotorID));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.driveMotorID));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID));
+        orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID));
         orchestra.play();
     }
 }
