@@ -18,7 +18,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
 public class MoveRobotCommand extends SequentialCommandGroup{
-    public MoveRobotCommand(Swerve s_Swerve){
+    public MoveRobotCommand(Swerve s_Swerve, double distance){
         TrajectoryConfig config =
             new TrajectoryConfig(
                     Constants.AutoConstants.kMaxSpeedMetersPerSecond,
@@ -34,7 +34,7 @@ public class MoveRobotCommand extends SequentialCommandGroup{
                     //new Translation2d(0, Units.feetToMeters(1))
                 ), 
    
-                new Pose2d(0, Units.feetToMeters(-2), new Rotation2d(0)), 
+                new Pose2d(0, Units.feetToMeters(distance), new Rotation2d(0)), 
                 
                 config);
 

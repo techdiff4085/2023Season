@@ -39,12 +39,23 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton aimRobotAtTag = new JoystickButton(driver, XboxController.Button.kA.value);
-    private final JoystickButton positionRobotAtTag = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton positionRobotAtTag2 = new JoystickButton(driver, XboxController.Button.kX.value);
-    private final JoystickButton positionRobotAtTag3 = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton positionRobotAtTag4 = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton moveRobotRight = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton moveRobotLeft = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton moveRobotLeftOuter = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton moveRobotRightOuter = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton slowFast = new JoystickButton(driver, XboxController.Button.kStart.value);
+
+    /* Shooter/ Arm Controller buttons */ 
+    private final JoystickButton armHome = new JoystickButton(armController, XboxController.Button.kA.value);
+    private final JoystickButton armLow = new JoystickButton(armController, XboxController.Button.kY.value);
+    private final JoystickButton armFloor = new JoystickButton(armController, XboxController.Button.kX.value);
+    private final JoystickButton armHigh = new JoystickButton(armController, XboxController.Button.kB.value);
+    private final JoystickButton toggleGrabber = new JoystickButton(armController, XboxController.Button.kRightBumper.value);
+    private final JoystickButton toggleWrist = new JoystickButton(armController, XboxController.Button.kLeftBumper.value);
+
+
 
     //play music
     private final JoystickButton playMusicButton = new JoystickButton(armController, XboxController.Button.kA.value);
@@ -68,6 +79,8 @@ public class RobotContainer {
     private Command m_PathPlannerAuto4 = new PathPlannerAuto4(s_Swerve);
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+    private int driverDivisor = 2;
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -77,9 +90,9 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis)/2, 
-                () -> -driver.getRawAxis(strafeAxis)/2, 
-                () -> -driver.getRawAxis(rotationAxis)/2, 
+                () -> -driver.getRawAxis(translationAxis)/driverDivisor, 
+                () -> -driver.getRawAxis(strafeAxis)/driverDivisor, 
+                () -> -driver.getRawAxis(rotationAxis)/driverDivisor, 
                 () -> true
             )
         );
@@ -116,16 +129,25 @@ public class RobotContainer {
         aimRobotAtTag.onTrue(new AimSwerveAtTagCommand(tx, 0.0, s_Swerve));
 
         //B Button
-        positionRobotAtTag.onTrue(new MoveRobotCommand(s_Swerve));
+        moveRobotRight.onTrue(new MoveRobotCommand(s_Swerve, 2));
 
         //X Button
-        positionRobotAtTag2.onTrue(new ReverseRobotCommand(s_Swerve));
+        moveRobotLeft.onTrue(new MoveRobotCommand(s_Swerve, -2));
 
-        //Y Button
-        positionRobotAtTag3.onTrue(new ForwardRobotCommand(s_Swerve));
+        //Right bumper Button
+        moveRobotRightOuter.onTrue(new MoveRobotCommand(s_Swerve, 4));
 
-        //Start Button
-        positionRobotAtTag4.onTrue(new BackwardRobotCommand(s_Swerve));
+        //left bumper Button
+        moveRobotLeftOuter.onTrue(new MoveRobotCommand(s_Swerve, -4));
+        
+        //start button
+        slowFast.onTrue(new InstantCommand(() -> {
+            if(driverDivisor == 2 ){
+                driverDivisor = 3;
+            } else {
+                driverDivisor = 2;
+            }
+        }));
 
         
     }
