@@ -18,7 +18,7 @@ public class MoveShoulderToHome extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveShoulderToHome(Arm subsystem, boolean Lower) {
+  public MoveShoulderToHome(Arm subsystem) {
     m_arm = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);

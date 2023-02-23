@@ -19,7 +19,7 @@ public class MoveElbowToLow extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveElbowToLow(Arm subsystem, boolean Lower) {
+  public MoveElbowToLow(Arm subsystem) {
     m_arm = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);

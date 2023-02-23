@@ -29,20 +29,8 @@ public class Arm extends SubsystemBase {
         return position;
     }
 
-    public void Resting(){
-
-    }
-
-    public void Ground(){
-
-    }
-    
-    public void low(){
-
-    }
-
-    public void high(){
-
+    public void setPosition(Position myPosition){
+        //TODO set the value of the position variable to the input
     }
 
     public boolean isElbowHome(){

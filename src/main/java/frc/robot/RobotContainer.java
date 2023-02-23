@@ -13,12 +13,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Arm.Position;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -62,6 +64,7 @@ public class RobotContainer {
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
+    public static final Arm m_arm = new Arm();
 
     /* Limelight */
     private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -122,6 +125,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        /* Driver Buttons */
         //Y Button
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
@@ -149,6 +153,22 @@ public class RobotContainer {
             }
         }));
 
+        /* Arm Operator Buttons */
+        armHome.onTrue(
+            //We want to do the following commands sequentially
+            new SequentialCommandGroup(
+                //First, we want to move all the different arm components
+                new ParallelCommandGroup(
+                    new MoveShoulderToHome(m_arm),
+                    new MoveElbowToHome(m_arm)
+                ),
+                //Then, we want to set the position of the robot
+                new InstantCommand(() -> m_arm.setPosition(Position.Home))
+            )    
+        );
+
+        //TODO do the rest of the arm buttons.
+        
         
     }
 
