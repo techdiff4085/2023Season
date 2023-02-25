@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.music.Orchestra;
 
@@ -12,15 +13,28 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.autos.Blue1Auto;
+import frc.robot.autos.PathPlannerAuto2;
+import frc.robot.autos.PathPlannerAuto4;
+import frc.robot.commands.AimSwerveAtTagCommand;
+import frc.robot.commands.BalanceCommand;
+import frc.robot.commands.MoveElbowToFloor;
+import frc.robot.commands.MoveElbowToHigh;
+import frc.robot.commands.MoveElbowToHome;
+import frc.robot.commands.MoveElbowToLow;
+import frc.robot.commands.MoveRobotCommand;
+import frc.robot.commands.MoveShoulderToHigh;
+import frc.robot.commands.MoveShoulderToHome;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Arm.Position;
+import frc.robot.subsystems.Swerve;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -38,6 +52,7 @@ public class RobotContainer {
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
+    public static int driverDivisor = 2;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
@@ -82,7 +97,7 @@ public class RobotContainer {
     private Command m_PathPlannerAuto4 = new PathPlannerAuto4(s_Swerve);
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-    private int driverDivisor = 2;
+    
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -153,6 +168,21 @@ public class RobotContainer {
             }
         }));
 
+        JoystickButton ledOn = new JoystickButton(driver, XboxController.Button.kBack.value);
+    
+        Command ClearSticky = new ParallelCommandGroup(
+          new InstantCommand(()-> new TalonFX(Constants.Swerve.Mod0.angleMotorID).clearStickyFaults()), 
+          new InstantCommand(()-> new TalonFX(Constants.Swerve.Mod0.driveMotorID).clearStickyFaults()), 
+          new InstantCommand(()-> new TalonFX(Constants.Swerve.Mod1.angleMotorID).clearStickyFaults()), 
+          new InstantCommand(()-> new TalonFX(Constants.Swerve.Mod1.driveMotorID).clearStickyFaults()),
+          new InstantCommand(()-> new TalonFX(Constants.Swerve.Mod2.angleMotorID).clearStickyFaults()), 
+          new InstantCommand(()-> new TalonFX(Constants.Swerve.Mod2.driveMotorID).clearStickyFaults()),
+          new InstantCommand(()-> new TalonFX(Constants.Swerve.Mod3.angleMotorID).clearStickyFaults()), 
+          new InstantCommand(()-> new TalonFX(Constants.Swerve.Mod3.driveMotorID).clearStickyFaults())
+          );
+
+        ledOn.whileTrue(ClearSticky);
+
         /* Arm Operator Buttons */
         armHome.onTrue(
             //We want to do the following commands sequentially
@@ -168,8 +198,38 @@ public class RobotContainer {
         );
 
         //TODO do the rest of the arm buttons.
+        armFloor.onTrue(
+            new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                    new MoveShoulderToHome(m_arm),
+                    new MoveElbowToFloor(m_arm)
+                ),
+                new InstantCommand(() -> m_arm.setPosition(Position.Floor))
+            )
+        );
+
+        armLow.onTrue(
+            new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                    // Need Encoder
+                    new MoveShoulderToHigh(m_arm),
+                    new MoveElbowToLow(m_arm)
+                ),
+                new InstantCommand(() -> m_arm.setPosition(Position.Low))
+            )
+        );
         
+        armHigh.onTrue(
+            new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                    new MoveShoulderToHigh(m_arm),
+                    new MoveElbowToHigh(m_arm)
+                ),
+                new InstantCommand(() -> m_arm.setPosition(Position.High))
+            )
+        );
         
+
     }
 
     /**
@@ -206,4 +266,7 @@ public class RobotContainer {
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID));
         orchestra.play();
     }
+
+    
+    
 }

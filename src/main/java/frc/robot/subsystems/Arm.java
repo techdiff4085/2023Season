@@ -31,6 +31,7 @@ public class Arm extends SubsystemBase {
 
     public void setPosition(Position myPosition){
         //TODO set the value of the position variable to the input
+        myPosition = position;
     }
 
     public boolean isElbowHome(){

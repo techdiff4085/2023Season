@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -139,7 +138,7 @@ public class Swerve extends SubsystemBase {
         
         //m_poseEstimator.resetPosition(getYaw(), getModulePositions(), pose);
     }
-
+    
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  
@@ -147,7 +146,8 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
+            SmartDashboard.putString("Mod" + mod.moduleNumber + "Sticky Fault", mod.getStickyFault());   
         }
     }
 }
