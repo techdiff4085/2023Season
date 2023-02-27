@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.ctre.phoenix.sensors.Pigeon2Configuration;
+//import com.ctre.phoenix.sensors.Pigeon2Configuration;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,8 +27,8 @@ public class Swerve extends SubsystemBase {
     private SwerveDrivePoseEstimator m_poseEstimator;
 
     public Swerve() {
-        //gyro = new Pigeon2(Constants.Swerve.pigeonID,"Carnie");
-        gyro = new Pigeon2(Constants.Swerve.pigeonID);
+        gyro = new Pigeon2(Constants.Swerve.pigeonID,"Carnie");
+        //gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
 
         mSwerveMods = new SwerveModule[] {
@@ -147,7 +147,16 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
-            SmartDashboard.putString("Mod" + mod.moduleNumber + "Sticky Fault", mod.getStickyFault());   
+            SmartDashboard.putString("Mod" + mod.moduleNumber + "Sticky Fault", mod.getStickyFault());  
+            SmartDashboard.putNumber("Mod" + mod.moduleNumber + " getSelectedSensorPosition is", mod.getSelectedSensorPosition());
+            SmartDashboard.putNumber("Mod" + mod.moduleNumber + " drive motor temperature is", mod.getDriveMotorTemperature());
+            SmartDashboard.putNumber("Mod" + mod.moduleNumber + " angle motor temperature is", mod.getAngleMotorTemperature());
+        }
+    }
+
+    public void resetMotorPosition(){
+        for(SwerveModule mod: mSwerveMods){
+            mod.mDriveMotor.setSelectedSensorPosition(0);
         }
     }
 }

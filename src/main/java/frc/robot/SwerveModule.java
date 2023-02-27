@@ -21,7 +21,7 @@ public class SwerveModule {
     private Rotation2d lastAngle;
 
     private TalonFX mAngleMotor;
-    private TalonFX mDriveMotor;
+    public TalonFX mDriveMotor;
     private CANCoder angleEncoder;
     private StickyFaults mStickyFaults = new StickyFaults();
 
@@ -32,18 +32,18 @@ public class SwerveModule {
         this.angleOffset = moduleConstants.angleOffset;
         
         /* Angle Encoder Config */
-        //angleEncoder = new CANCoder(moduleConstants.cancoderID, "Carnie");
-        angleEncoder = new CANCoder(moduleConstants.cancoderID);
+        angleEncoder = new CANCoder(moduleConstants.cancoderID, "Carnie");
+        //angleEncoder = new CANCoder(moduleConstants.cancoderID);
         configAngleEncoder();
 
         /* Angle Motor Config */
-        //mAngleMotor = new TalonFX(moduleConstants.angleMotorID, "Carnie");
-        mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
+        mAngleMotor = new TalonFX(moduleConstants.angleMotorID, "Carnie");
+        //mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
         configAngleMotor();
 
         /* Drive Motor Config */
-        //mDriveMotor = new TalonFX(moduleConstants.driveMotorID, "Carnie");
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
+        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, "Carnie");
+        //mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
         configDriveMotor();
 
         lastAngle = getState().angle;
@@ -98,6 +98,7 @@ public class SwerveModule {
         mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
+        mAngleMotor.clearStickyFaults();
         resetToAbsolute();
     }
 
@@ -107,6 +108,7 @@ public class SwerveModule {
         mDriveMotor.setInverted(Constants.Swerve.driveMotorInvert);
         mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
         mDriveMotor.setSelectedSensorPosition(0);
+        mDriveMotor.clearStickyFaults();
     }
 
     public SwerveModuleState getState(){
@@ -125,5 +127,16 @@ public class SwerveModule {
 
     public String getStickyFault(){
        return mAngleMotor.getStickyFaults(mStickyFaults).toString();
+    }
+    public double getDriveMotorTemperature(){
+        return mDriveMotor.getTemperature();
+    }
+    public double getAngleMotorTemperature(){
+        return mAngleMotor.getTemperature();
+    }
+    //method can be used in following the angle motor position
+    public double getSelectedSensorPosition(){
+        // TO DO change mDriveMotor to arm motor instance
+        return mDriveMotor.getSelectedSensorPosition();
     }
 }

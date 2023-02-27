@@ -8,7 +8,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Arm.Position;
+//import frc.robot.subsystems.Arm.Position;
+// May be needed soon when we actually have the arm to code
 
 /** An example command that uses an example subsystem. */
 public class MoveElbowToFloor extends CommandBase {

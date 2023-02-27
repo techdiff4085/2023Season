@@ -9,10 +9,10 @@ public class BalanceCommand extends CommandBase {
   
     private Swerve m_Swerve;
 
-    private double error;
+    //private double error;
     private double pitchCurrentAngle;
-    private double rollCurrentAngle;
-    private double drivePower;
+    //private double rollCurrentAngle;
+    //private double drivePower;
   
     public BalanceCommand(Swerve swerve) {
       this.m_Swerve = swerve;
@@ -27,7 +27,7 @@ public class BalanceCommand extends CommandBase {
     @Override
     public void execute() {
       this.pitchCurrentAngle = m_Swerve.getPitch();
-      this.rollCurrentAngle = m_Swerve.getRoll();
+      //this.rollCurrentAngle = m_Swerve.getRoll();
 
       if (Math.abs(pitchCurrentAngle) > 2){
         if (this.pitchCurrentAngle < 0) {
@@ -38,23 +38,26 @@ public class BalanceCommand extends CommandBase {
         }
       }
 
-      if (Math.abs (rollCurrentAngle) > 2){
+      /* f (Math.abs (rollCurrentAngle) > 2){
         if (this.rollCurrentAngle < 0){
           m_Swerve.drive(new Translation2d(0.0, -0.1), 0.0, false, false);
       } 
       else {
         m_Swerve.drive(new Translation2d(0.0, 0.1), 0.0, false, false);
-      }
+      } */
 
-      if (Math.abs(pitchCurrentAngle) <= 2 && Math.abs(rollCurrentAngle) <= 2){
+      //&& Math.abs(rollCurrentAngle) <= 2
+
+      if (Math.abs(pitchCurrentAngle) <= 2 ){
         m_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, false);
       }
-    }
+       // Debugging Print Statments
+       SmartDashboard.putNumber("Current Pitch: ", pitchCurrentAngle);
+    } 
 
-      // Debugging Print Statments
-      SmartDashboard.putNumber("Current Pitch: ", pitchCurrentAngle);
-      SmartDashboard.putNumber("Current Roll: ", rollCurrentAngle);
-    }
+     
+      //SmartDashboard.putNumber("Current Roll: ", rollCurrentAngle);
+    
   
     // Called once the command ends or is interrupted.
     @Override

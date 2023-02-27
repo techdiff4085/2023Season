@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.ctre.phoenix.ErrorCode;
+//import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.music.Orchestra;
 
@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+//import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.Blue1Auto;
 import frc.robot.autos.PathPlannerAuto2;
@@ -168,7 +168,7 @@ public class RobotContainer {
             }
         }));
 
-        JoystickButton ledOn = new JoystickButton(driver, XboxController.Button.kBack.value);
+        /* can be removed ///JoystickButton ledOn = new JoystickButton(driver, XboxController.Button.kBack.value);
     
         Command ClearSticky = new ParallelCommandGroup(
           new InstantCommand(()-> new TalonFX(Constants.Swerve.Mod0.angleMotorID).clearStickyFaults()), 
@@ -182,6 +182,7 @@ public class RobotContainer {
           );
 
         ledOn.whileTrue(ClearSticky);
+        */
 
         /* Arm Operator Buttons */
         armHome.onTrue(
@@ -229,6 +230,8 @@ public class RobotContainer {
             )
         );
         
+        JoystickButton resetPositionButton = new JoystickButton(driver, XboxController.Button.kBack.value);
+        resetPositionButton.onTrue(new InstantCommand(()-> s_Swerve.resetMotorPosition()));
 
     }
 
@@ -246,7 +249,7 @@ public class RobotContainer {
     public void PlayMusic(String Filename){
         Orchestra orchestra = new Orchestra();
         orchestra.loadMusic(Filename);
-        /*
+        
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.driveMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID,"Carnie"));
@@ -255,7 +258,7 @@ public class RobotContainer {
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.driveMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID,"Carnie"));
-        */
+        /* 
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.driveMotorID));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID));
@@ -264,6 +267,7 @@ public class RobotContainer {
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.driveMotorID));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID));
+        */
         orchestra.play();
     }
 
