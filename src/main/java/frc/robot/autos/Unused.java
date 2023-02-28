@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class Autonomous1 extends SequentialCommandGroup {
-    public Autonomous1(Swerve s_Swerve){
+public class Unused extends SequentialCommandGroup {
+    public Unused(Swerve s_Swerve){
        
         TrajectoryConfig config =
             new TrajectoryConfig(

@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.autos.Blue1Auto;
-import frc.robot.autos.PathPlannerAuto2;
-import frc.robot.autos.PathPlannerAuto4;
+import frc.robot.autos.SideAuto;
+import frc.robot.autos.MiddleAuto;
+import frc.robot.autos.Unused2;
 import frc.robot.commands.AimSwerveAtTagCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.MoveElbowToFloor;
@@ -90,11 +90,11 @@ public class RobotContainer {
     //private Command m_auto1 = new Autonomous1(s_Swerve);
     //private Command m_autoExample = new exampleAuto(s_Swerve);
     private Command m_PathPlannerAuto2 = new SequentialCommandGroup(
-        new PathPlannerAuto2(s_Swerve),
+        new MiddleAuto(s_Swerve),
         new BalanceCommand(s_Swerve)
     );
-    private Command m_PathPlannerBlueAuto1 = new Blue1Auto(s_Swerve);
-    private Command m_PathPlannerAuto4 = new PathPlannerAuto4(s_Swerve);
+    private Command m_PathPlannerBlueAuto1 = new SideAuto(s_Swerve);
+    private Command m_PathPlannerAuto4 = new Unused2(s_Swerve);
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     
@@ -166,6 +166,15 @@ public class RobotContainer {
             } else {
                 driverDivisor = 2;
             }
+            s_Swerve.setDefaultCommand(
+                new TeleopSwerve(
+                    s_Swerve, 
+                    () -> -driver.getRawAxis(translationAxis)/driverDivisor, 
+                    () -> -driver.getRawAxis(strafeAxis)/driverDivisor, 
+                    () -> -driver.getRawAxis(rotationAxis)/driverDivisor, 
+                    () -> true
+                )
+            );
         }));
 
         /* can be removed ///JoystickButton ledOn = new JoystickButton(driver, XboxController.Button.kBack.value);

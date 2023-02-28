@@ -17,9 +17,9 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
-public class PathPlannerAuto4 extends SequentialCommandGroup {
+public class Unused2 extends SequentialCommandGroup {
 
-  public PathPlannerAuto4(Swerve swerve) {
+  public Unused2(Swerve swerve) {
     //Exclude ".path" from pathName
     PathPlannerTrajectory trajectory = PathPlanner.loadPath("Blue3Auto", AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared);

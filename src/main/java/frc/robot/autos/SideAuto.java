@@ -17,11 +17,11 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
-public class Blue1Auto extends SequentialCommandGroup {
+public class SideAuto extends SequentialCommandGroup {
 
-  public Blue1Auto(Swerve swerve) {
+  public SideAuto(Swerve swerve) {
     //Exclude ".path" from pathName
-    PathPlannerTrajectory trajectory = PathPlanner.loadPath("Blue1Auto", AutoConstants.kMaxSpeedMetersPerSecond,
+    PathPlannerTrajectory trajectory = PathPlanner.loadPath("SideAuto", AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared);
     SmartDashboard.putString("Trajectory is ", trajectory.toString());
     PPSwerveControllerCommand swerveControllerCommand = new PPSwerveControllerCommand(
