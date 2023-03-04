@@ -34,8 +34,6 @@ public class MoveElbowToFloor extends CommandBase {
   @Override
   public void execute() {
     m_arm.elbow.set(ControlMode.Velocity, -0.5);
-
-    
   }
 
   // Called once the command ends or is interrupted.

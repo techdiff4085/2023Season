@@ -19,9 +19,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.autos.SideAuto;
-import frc.robot.autos.MiddleAuto;
-import frc.robot.autos.Unused2;
+import frc.robot.autos.SideAutonomous;
+import frc.robot.autos.ChargeStationAutonomous;
 import frc.robot.commands.AimSwerveAtTagCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.MoveElbowToFloor;
@@ -43,6 +42,11 @@ import frc.robot.subsystems.Swerve;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    //lights
+    //private static CANdle candle = new CANdle(40, "Carnie");
+    //private static CANdleConfiguration candleConfig = new CANdleConfiguration();
+    private static boolean isPurple = true;
+
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick armController = new Joystick(1);
@@ -63,19 +67,20 @@ public class RobotContainer {
     private final JoystickButton moveRobotLeftOuter = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton moveRobotRightOuter = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     private final JoystickButton slowFast = new JoystickButton(driver, XboxController.Button.kStart.value);
+    private final JoystickButton changeColor = new JoystickButton(driver, XboxController.Button.kBack.value);
 
     /* Shooter/ Arm Controller buttons */ 
     private final JoystickButton armHome = new JoystickButton(armController, XboxController.Button.kA.value);
     private final JoystickButton armLow = new JoystickButton(armController, XboxController.Button.kY.value);
     private final JoystickButton armFloor = new JoystickButton(armController, XboxController.Button.kX.value);
     private final JoystickButton armHigh = new JoystickButton(armController, XboxController.Button.kB.value);
-    private final JoystickButton toggleGrabber = new JoystickButton(armController, XboxController.Button.kRightBumper.value);
-    private final JoystickButton toggleWrist = new JoystickButton(armController, XboxController.Button.kLeftBumper.value);
+    //private final JoystickButton toggleGrabber = new JoystickButton(armController, XboxController.Button.kRightBumper.value);
+    //private final JoystickButton toggleWrist = new JoystickButton(armController, XboxController.Button.kLeftBumper.value);
 
 
 
     //play music
-    private final JoystickButton playMusicButton = new JoystickButton(armController, XboxController.Button.kA.value);
+    //private final JoystickButton playMusicButton = new JoystickButton(armController, XboxController.Button.kA.value);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -86,15 +91,12 @@ public class RobotContainer {
     private static NetworkTableEntry ty = table.getEntry("ty");
     private static NetworkTableEntry tx = table.getEntry("tx");
 
-    /* Autonomous commands */
-    //private Command m_auto1 = new Autonomous1(s_Swerve);
-    //private Command m_autoExample = new exampleAuto(s_Swerve);
-    private Command m_PathPlannerAuto2 = new SequentialCommandGroup(
-        new MiddleAuto(s_Swerve),
+    /* Autonomous Commands */
+    private Command m_SideAutonomous = new SideAutonomous(s_Swerve);
+    private Command m_ChargeStationAutonomous = new SequentialCommandGroup(
+        new ChargeStationAutonomous(s_Swerve),
         new BalanceCommand(s_Swerve)
     );
-    private Command m_PathPlannerBlueAuto1 = new SideAuto(s_Swerve);
-    private Command m_PathPlannerAuto4 = new Unused2(s_Swerve);
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     
@@ -102,6 +104,12 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+
+        //lights
+        //candleConfig.stripType = LEDStripType.RGB;
+        //candleConfig.brightnessScalar = 1;
+        //candle.configAllSettings(candleConfig);
+        //candle.setLEDs(75 ,0, 130);
 
        // Limelight.getInstance();
        
@@ -122,15 +130,11 @@ public class RobotContainer {
         SmartDashboard.putNumber("ty", ty.getDouble(0.0));
 
         // A chooser for autonomous commands
-        
-        m_chooser.addOption("PathPlannerAuto2", m_PathPlannerAuto2);
-        m_chooser.setDefaultOption("Blue Auto 1", m_PathPlannerBlueAuto1);
-        
-        //m_chooser.setDefaultOption("Spinny Spin", m_PathPlannerAuto3);
+        m_chooser.setDefaultOption("Side Auto", m_SideAutonomous);
+        m_chooser.addOption("ChargeStationAuto", m_ChargeStationAutonomous);
         
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);
-
     }
 
     /**
@@ -177,6 +181,19 @@ public class RobotContainer {
             );
         }));
 
+        //back button
+        changeColor.onTrue(new InstantCommand(() -> {
+
+            if (isPurple){
+                //candle.setLEDs(255, 215, 0);
+                isPurple = false;
+            }
+            else {
+                //candle.setLEDs(75 ,0, 130);
+                isPurple = true;
+            }
+        }));
+
         /* can be removed ///JoystickButton ledOn = new JoystickButton(driver, XboxController.Button.kBack.value);
     
         Command ClearSticky = new ParallelCommandGroup(
@@ -207,7 +224,6 @@ public class RobotContainer {
             )    
         );
 
-        //TODO do the rest of the arm buttons.
         armFloor.onTrue(
             new SequentialCommandGroup(
                 new ParallelCommandGroup(

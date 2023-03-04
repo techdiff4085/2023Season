@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class Unused extends SequentialCommandGroup {
-    public Unused(Swerve s_Swerve){
+public class ChargeStationAutonomous extends SequentialCommandGroup {
+    public ChargeStationAutonomous(Swerve s_Swerve){
        
         TrajectoryConfig config =
             new TrajectoryConfig(
@@ -36,29 +36,16 @@ public class Unused extends SequentialCommandGroup {
                 // 4 should be 18.8
                 
                 List.of(
-                    new Translation2d(13.5, Units.feetToMeters(0))
+                    new Translation2d(17, Units.feetToMeters(0)),
+                    new Translation2d(8, Units.feetToMeters(0))
 
                 ), 
                 // End 3 meters straight ahead of where we started, facing forward
                 // good feetToMeters is 29 to get on charge station
-                new Pose2d(-11, Units.feetToMeters(1), new Rotation2d(0)),
+                new Pose2d(1, Units.feetToMeters(0), new Rotation2d(0)),
                 config);
 
-        Trajectory exampleTrajectory2 =
-                TrajectoryGenerator.generateTrajectory(
-                    // Start at the origin facing the +X direction
-                    new Pose2d(0, 0, new Rotation2d(0)),
-                    // Pass through these two interior waypoints, making an 's' curve path
-                    // 4 should be 18.8
-                    
-                    List.of(
-                        new Translation2d(Units.feetToMeters(0), Units.feetToMeters(-4))
-                ), 
-                    // End 3 meters straight ahead of where we started, facing forward
-                    // good feetToMeters is 29 to get on charge station
-                    new Pose2d(Units.feetToMeters(0), Units.feetToMeters(-8), new Rotation2d(0)),
-                    config);                
-           
+
         var thetaController =
             new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
