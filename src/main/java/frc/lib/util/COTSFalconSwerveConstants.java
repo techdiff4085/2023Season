@@ -74,7 +74,7 @@ public class COTSFalconSwerveConstants {
         double wheelDiameter = Units.inchesToMeters(4.0);
 
         /** (150 / 7) : 1 */
-        //TODO verufy this angleGearRatio
+        //TODO verify this angleGearRatio
         double angleGearRatio = ((150.0 / 7.0) / 1.0);
 
         double angleKP = 0.3;
