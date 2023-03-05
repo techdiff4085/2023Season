@@ -13,6 +13,7 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static final double stickDeadband = 0.1;
 
+    //TODO update all port numbers
     public static final int DriverJoystickPort = 0;
     public static final int ArmDriverJoystickPort = 1;
 
@@ -32,6 +33,7 @@ public final class Constants {
     public static final int LidarPort = 0;
 
     public static final class Swerve {
+        
         public static final int pigeonID = 30;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
@@ -41,6 +43,7 @@ public final class Constants {
             COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L1);
 
         /* Drivetrain Constants */
+        //TODO - update measurements
         public static final double trackWidth = Units.inchesToMeters(25.25); //This must be tuned to specific robot
         public static final double wheelBase = Units.inchesToMeters(25.25); //This must be tuned to specific robot
         public static final double wheelCircumference = chosenModule.wheelCircumference;
@@ -118,6 +121,7 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
+        //TODO Verify all angleoffset numbers
         public static final class Mod0 { //This must be tuned to specific robot
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 11;
