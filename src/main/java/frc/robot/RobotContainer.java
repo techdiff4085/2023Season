@@ -48,9 +48,8 @@ public class RobotContainer {
     private static boolean isPurple = true;
 
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
-    private final Joystick armController = new Joystick(1);
-
+    private final Joystick driver = new Joystick(Constants.DriverJoystickPort);
+    private final Joystick armController = new Joystick(Constants.ArmDriverJoystickPort);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -184,6 +183,7 @@ public class RobotContainer {
         //back button
         changeColor.onTrue(new InstantCommand(() -> {
 
+            /* 
             if (isPurple){
                 //candle.setLEDs(255, 215, 0);
                 isPurple = false;
@@ -192,6 +192,7 @@ public class RobotContainer {
                 //candle.setLEDs(75 ,0, 130);
                 isPurple = true;
             }
+            */
         }));
 
         /* can be removed ///JoystickButton ledOn = new JoystickButton(driver, XboxController.Button.kBack.value);

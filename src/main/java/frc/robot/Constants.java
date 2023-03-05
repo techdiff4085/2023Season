@@ -13,6 +13,24 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static final double stickDeadband = 0.1;
 
+    public static final int DriverJoystickPort = 0;
+    public static final int ArmDriverJoystickPort = 1;
+
+    /* Arm Motors */
+    public static final int ShoulderMotorPort = 0;
+    public static final int ElbowMotorPort = 0;
+    
+    /* Limit Switches */
+    public static final int ShoulderHomeLimitSwitchPort = 0;
+    public static final int ElbowHomeLimitSwitchPort = 0;
+    public static final int ElbowFloorLimitSwitchPort = 0;
+    public static final int ElbowLowLimitSwitchPort = 0;
+    public static final int ElbowHighLimitSwitchPort = 0;
+    public static final int ShoulderHighLimitSwitchPort = 0;
+
+    /* Lidar */
+    public static final int LidarPort = 0;
+
     public static final class Swerve {
         public static final int pigeonID = 30;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
