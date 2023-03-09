@@ -22,12 +22,12 @@ public final class Constants {
     public static final int ElbowMotorPort = 32;
     
     /* Limit Switches */
-    public static final int ShoulderHomeLimitSwitchPort = 0;
-    public static final int ElbowHomeLimitSwitchPort = 0;
-    public static final int ElbowFloorLimitSwitchPort = 0;
-    public static final int ElbowLowLimitSwitchPort = 0;
-    public static final int ElbowHighLimitSwitchPort = 0;
-    public static final int ShoulderHighLimitSwitchPort = 0;
+    public static final int ShoulderHomeLimitSwitchPort = 6;  //shoulder stop
+    public static final int ElbowHomeLimitSwitchPort = 2;  //#2
+    public static final int ElbowFloorLimitSwitchPort = 7; //#arm stop #7
+    public static final int ElbowLowLimitSwitchPort = 1;  //#1
+    public static final int ElbowHighLimitSwitchPort = 4; //#4
+    public static final int ShoulderHighLimitSwitchPort = 3; //#3
 
     /* Lidar */
     public static final int LidarPort = 0;
@@ -44,8 +44,8 @@ public final class Constants {
 
         /* Drivetrain Constants */
         //TODO - update measurements
-        public static final double trackWidth = Units.inchesToMeters(25.25); //This must be tuned to specific robot
-        public static final double wheelBase = Units.inchesToMeters(25.25); //This must be tuned to specific robot
+        public static final double trackWidth = Units.inchesToMeters(24.0); //This must be tuned to specific robot
+        public static final double wheelBase = Units.inchesToMeters(24.0); //This must be tuned to specific robot
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         /* Swerve Kinematics 
@@ -125,8 +125,8 @@ public final class Constants {
         public static final class Mod0 { //This must be tuned to specific robot
             public static final int driveMotorID = 31;
             public static final int angleMotorID = 33;
-            public static final int canCoderID = 30;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(4.658);
+            public static final int canCoderID = 36;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -136,7 +136,7 @@ public final class Constants {
             public static final int driveMotorID = 24;
             public static final int angleMotorID = 26;
             public static final int canCoderID = 22;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(249.961);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(222.87);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -146,7 +146,7 @@ public final class Constants {
             public static final int driveMotorID = 29;
             public static final int angleMotorID = 35; 
             public static final int canCoderID = 0;  
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(136.494);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(210.58);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -156,7 +156,7 @@ public final class Constants {
             public static final int driveMotorID = 25;
             public static final int angleMotorID = 23;
             public static final int canCoderID = 21;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(282.393);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(47.28);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }

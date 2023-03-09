@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.autos.SideAutonomous;
 import frc.robot.autos.ChargeStationAutonomous;
+import frc.robot.autos.SideAutonomous;
 import frc.robot.commands.AimSwerveAtTagCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.MoveElbowToFloor;
@@ -28,11 +28,10 @@ import frc.robot.commands.MoveElbowToHigh;
 import frc.robot.commands.MoveElbowToHome;
 import frc.robot.commands.MoveElbowToLow;
 import frc.robot.commands.MoveRobotCommand;
-import frc.robot.commands.MoveShoulderToHigh;
-import frc.robot.commands.MoveShoulderToHome;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Arm.Position;
+import frc.robot.subsystems.Elbow;
+import frc.robot.subsystems.Elbow.Position;
+import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.Swerve;
 
 /**
@@ -55,26 +54,28 @@ public class RobotContainer {
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
-    public static int driverDivisor = 2;
+    public static double driverDivisor = 1.2;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton aimRobotAtTag = new JoystickButton(driver, XboxController.Button.kA.value);
-    private final JoystickButton moveRobotRight = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton moveRobotLeft = new JoystickButton(driver, XboxController.Button.kX.value);
-    private final JoystickButton moveRobotLeftOuter = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton moveRobotRightOuter = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton slowFast = new JoystickButton(driver, XboxController.Button.kStart.value);
+    private final JoystickButton moveRobotRight = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton moveRobotLeft = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton moveRobotLeftOuter = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton moveRobotRightOuter = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+ // private final JoystickButton slowFast = new JoystickButton(driver, XboxController.Button.kStart.value);
+    private final JoystickButton balanceRobot = new JoystickButton(driver, XboxController.Button.kStart.value);
     private final JoystickButton changeColor = new JoystickButton(driver, XboxController.Button.kBack.value);
 
     /* Shooter/ Arm Controller buttons */ 
-    private final JoystickButton armHome = new JoystickButton(armController, XboxController.Button.kA.value);
+    private final JoystickButton grab = new JoystickButton(armController, XboxController.Button.kA.value);
     private final JoystickButton armLow = new JoystickButton(armController, XboxController.Button.kY.value);
     private final JoystickButton armFloor = new JoystickButton(armController, XboxController.Button.kX.value);
     private final JoystickButton armHigh = new JoystickButton(armController, XboxController.Button.kB.value);
+    private final JoystickButton armHome = new JoystickButton(armController, XboxController.Button.kLeftBumper.value);
     //private final JoystickButton toggleGrabber = new JoystickButton(armController, XboxController.Button.kRightBumper.value);
-    //private final JoystickButton toggleWrist = new JoystickButton(armController, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton toggleWrist = new JoystickButton(armController, XboxController.Button.kRightBumper.value);
 
 
 
@@ -83,7 +84,8 @@ public class RobotContainer {
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
-    public static final Arm m_arm = new Arm();
+    public static final Elbow m_elbow = new Elbow();
+    public static final Shoulder m_shoulder = new Shoulder();
 
     /* Limelight */
     private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -144,26 +146,39 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        //Y Button
+        /* Y Button */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-        //A Button
+        /* A Button */
         aimRobotAtTag.onTrue(new AimSwerveAtTagCommand(tx, 0.0, s_Swerve));
 
-        //B Button
+        /* B Button */
         moveRobotRight.onTrue(new MoveRobotCommand(s_Swerve, 2));
 
-        //X Button
+        /* X Button */
         moveRobotLeft.onTrue(new MoveRobotCommand(s_Swerve, -2));
 
-        //Right bumper Button
+        /* Right bumper Button */
+
+        //Driver
         moveRobotRightOuter.onTrue(new MoveRobotCommand(s_Swerve, 4));
 
-        //left bumper Button
+        //Shooter
+        toggleWrist.onTrue(new InstantCommand(() -> Elbow.toggleWrist()));
+
+        /* Left Bumper Button */
         moveRobotLeftOuter.onTrue(new MoveRobotCommand(s_Swerve, -4));
         
-        //start button
-        slowFast.onTrue(new InstantCommand(() -> {
+        /* Start Button */
+
+        //Driver
+        balanceRobot.whileTrue(new BalanceCommand(s_Swerve));
+
+        //Shooter
+        grab.onTrue(new InstantCommand(() -> Elbow.toggleGrabber()));
+
+
+      /*   slowFast.onTrue(new InstantCommand(() -> {
             if(driverDivisor == 2 ){
                 driverDivisor = 3;
             } else {
@@ -178,7 +193,7 @@ public class RobotContainer {
                     () -> true
                 )
             );
-        }));
+        }));*/
 
         //back button
         changeColor.onTrue(new InstantCommand(() -> {
@@ -217,21 +232,21 @@ public class RobotContainer {
             new SequentialCommandGroup(
                 //First, we want to move all the different arm components
                 new ParallelCommandGroup(
-                    new MoveShoulderToHome(m_arm),
-                    new MoveElbowToHome(m_arm)
+                    //new MoveShoulderToHome(m_shoulder),
+                    new MoveElbowToHome(m_elbow)
                 ),
                 //Then, we want to set the position of the robot
-                new InstantCommand(() -> m_arm.setPosition(Position.Home))
+                new InstantCommand(() -> m_elbow.setPosition(Position.Home))
             )    
         );
 
         armFloor.onTrue(
             new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                    new MoveShoulderToHome(m_arm),
-                    new MoveElbowToFloor(m_arm)
+                    //new MoveShoulderToHome(m_shoulder),
+                    new MoveElbowToFloor(m_elbow)
                 ),
-                new InstantCommand(() -> m_arm.setPosition(Position.Floor))
+                new InstantCommand(() -> m_elbow.setPosition(Position.Floor))
             )
         );
 
@@ -239,20 +254,20 @@ public class RobotContainer {
             new SequentialCommandGroup(
                 new ParallelCommandGroup(
                     // Need Encoder
-                    new MoveShoulderToHigh(m_arm),
-                    new MoveElbowToLow(m_arm)
+                    //new MoveShoulderToHigh(m_shoulder),
+                    new MoveElbowToLow(m_elbow)
                 ),
-                new InstantCommand(() -> m_arm.setPosition(Position.Low))
+                new InstantCommand(() -> m_elbow.setPosition(Position.Low))
             )
         );
         
         armHigh.onTrue(
             new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                    new MoveShoulderToHigh(m_arm),
-                    new MoveElbowToHigh(m_arm)
+                    //new MoveShoulderToHigh(m_shoulder),
+                    new MoveElbowToHigh(m_elbow)
                 ),
-                new InstantCommand(() -> m_arm.setPosition(Position.High))
+                new InstantCommand(() -> m_elbow.setPosition(Position.High))
             )
         );
         
@@ -275,7 +290,7 @@ public class RobotContainer {
     public void PlayMusic(String Filename){
         Orchestra orchestra = new Orchestra();
         orchestra.loadMusic(Filename);
-        
+        /*
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.driveMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID,"Carnie"));
@@ -284,7 +299,7 @@ public class RobotContainer {
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.driveMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID,"Carnie"));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID,"Carnie"));
-        /* 
+        */
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.angleMotorID));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod0.driveMotorID));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod1.angleMotorID));
@@ -293,7 +308,7 @@ public class RobotContainer {
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod2.driveMotorID));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.angleMotorID));
         orchestra.addInstrument(new TalonFX(Constants.Swerve.Mod3.driveMotorID));
-        */
+        
         orchestra.play();
     }
 

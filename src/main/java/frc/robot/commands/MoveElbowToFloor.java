@@ -7,21 +7,21 @@ package frc.robot.commands;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Elbow;
 //import frc.robot.subsystems.Arm.Position;
 // May be needed soon when we actually have the arm to code
 
 /** An example command that uses an example subsystem. */
 public class MoveElbowToFloor extends CommandBase {
-  private final Arm m_arm;
+  private final Elbow m_elbow;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveElbowToFloor(Arm subsystem) {
-    m_arm = subsystem;
+  public MoveElbowToFloor(Elbow subsystem) {
+    m_elbow = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -33,18 +33,18 @@ public class MoveElbowToFloor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.elbow.set(ControlMode.Velocity, -0.5);
+    m_elbow.elbow.set(ControlMode.Velocity, -0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.elbow.set(ControlMode.Velocity, 0);
+    m_elbow.elbow.set(ControlMode.Velocity, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_arm.isElbowFloor();
+    return m_elbow.isElbowFloor();
   }
 }

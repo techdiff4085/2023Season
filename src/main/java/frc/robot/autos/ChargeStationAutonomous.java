@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
+import frc.robot.commands.BalanceCommand;
 import frc.robot.subsystems.Swerve;
 
 public class ChargeStationAutonomous extends SequentialCommandGroup {
@@ -36,8 +37,9 @@ public class ChargeStationAutonomous extends SequentialCommandGroup {
                 // 4 should be 18.8
                 
                 List.of(
-                    new Translation2d(17, Units.feetToMeters(0)),
-                    new Translation2d(8, Units.feetToMeters(0))
+                    new Translation2d(17, Units.feetToMeters(1))
+                    //,
+                    //new Translation2d(8, Units.feetToMeters(0))
 
                 ), 
                 // End 3 meters straight ahead of where we started, facing forward
@@ -65,7 +67,11 @@ public class ChargeStationAutonomous extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory1.getInitialPose())),
-            swerveControllerCommand
+            swerveControllerCommand,
+            new BalanceCommand(s_Swerve),
+            new BalanceCommand(s_Swerve),
+            new BalanceCommand(s_Swerve),
+            new BalanceCommand(s_Swerve)
         );
 
         
