@@ -88,6 +88,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    //TODO - reset all positions to HOME
   }
 
   /** This function is called periodically during operator control. */

@@ -8,19 +8,22 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elbow;
-import frc.robot.subsystems.Elbow.Position;
+import frc.robot.subsystems.Position;
+import frc.robot.subsystems.Position.ArmPosition;
 
 /** An example command that uses an example subsystem. */
-public class MoveElbowToLow extends CommandBase {
+public class MoveElbowToMid extends CommandBase {
   private final Elbow m_elbow;
 
+  private final double m_speed;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveElbowToLow(Elbow subsystem) {
+  public MoveElbowToMid(Elbow subsystem, double speed) {
     m_elbow = subsystem;
+    m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -32,11 +35,11 @@ public class MoveElbowToLow extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_elbow.getPosition() == Position.Floor){
-      m_elbow.elbow.set(ControlMode.Velocity, 0.5);
+    if (Position.getPosition() == ArmPosition.Floor){
+      m_elbow.elbow.set(-m_speed);
     } 
     else {
-      m_elbow.elbow.set(ControlMode.Velocity, -0.5);
+      m_elbow.elbow.set(m_speed);
     }
     
   }

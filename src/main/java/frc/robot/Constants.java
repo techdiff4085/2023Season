@@ -26,8 +26,9 @@ public final class Constants {
     public static final int ElbowHomeLimitSwitchPort = 2;  //#2
     public static final int ElbowFloorLimitSwitchPort = 7; //#arm stop #7
     public static final int ElbowLowLimitSwitchPort = 1;  //#1
-    public static final int ElbowHighLimitSwitchPort = 4; //#4
-    public static final int ShoulderHighLimitSwitchPort = 3; //#3
+    public static final int ElbowHighLimitSwitchPort = 3; //#4
+    public static final int ShoulderHighLimitSwitchPort = 4; //#3
+    public static final int ShoulderLowLimitSwitchPort = 5;
 
     /* Lidar */
     public static final int LidarPort = 0;
@@ -126,7 +127,7 @@ public final class Constants {
             public static final int driveMotorID = 31;
             public static final int angleMotorID = 33;
             public static final int canCoderID = 36;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(3.6);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }

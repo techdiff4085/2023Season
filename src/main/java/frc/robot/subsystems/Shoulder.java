@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -8,29 +8,17 @@ import frc.robot.Constants;
 
 public class Shoulder extends SubsystemBase {
 
-    public TalonFX shoulder = new TalonFX(Constants.ShoulderMotorPort);
+    public WPI_TalonFX shoulder = new WPI_TalonFX(Constants.ShoulderMotorPort);
     private DigitalInput ShoulderHome = new DigitalInput(Constants.ShoulderHomeLimitSwitchPort);
+    private DigitalInput ShoulderLow = new DigitalInput(Constants.ShoulderLowLimitSwitchPort);
     private DigitalInput ShoulderHigh = new DigitalInput(Constants.ShoulderHighLimitSwitchPort);
-
-    public enum Position {
-        Home,
-        Floor,
-        Low,
-        High,
-    }
-
-    private Position position = Position.Home;
-
-    public Position getPosition(){
-        return position;
-    }
-
-    public void setPosition(Position myPosition){
-        myPosition = position;
-    }
 
     public boolean isShoulderHome(){
         return ShoulderHome.get();
+    }
+
+    public boolean isShoulderLow(){
+        return ShoulderLow.get();
     }
 
     public boolean isShoulderHigh(){

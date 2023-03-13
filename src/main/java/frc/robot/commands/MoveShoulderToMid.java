@@ -5,19 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Elbow;
+import frc.robot.subsystems.Position;
+import frc.robot.subsystems.Shoulder;
+import frc.robot.subsystems.Position.ArmPosition;
 
 /** An example command that uses an example subsystem. */
-public class MoveElbowToHigh extends CommandBase {
-  private final Elbow m_elbow;
+public class MoveShoulderToMid extends CommandBase {
+  private final Shoulder m_shoulder;
   private final double m_speed;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveElbowToHigh(Elbow subsystem, double speed) {
-    m_elbow = subsystem;
+  public MoveShoulderToMid(Shoulder subsystem, double speed) {
+    m_shoulder = subsystem;
     m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -30,18 +32,22 @@ public class MoveElbowToHigh extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elbow.elbow.set(-m_speed);
+    if (Position.getPosition() == ArmPosition.High){
+        m_shoulder.shoulder.set(-m_speed);
+    } else {
+        m_shoulder.shoulder.set(m_speed);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_elbow.elbow.set(0);
+    m_shoulder.shoulder.set(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_elbow.isElbowHigh();
+    return m_shoulder.isShoulderLow();
   }
 }

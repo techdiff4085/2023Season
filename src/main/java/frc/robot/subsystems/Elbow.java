@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -9,33 +10,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elbow extends SubsystemBase {
-
-    public TalonFX shoulder = new TalonFX(Constants.ShoulderMotorPort);
-    public TalonFX elbow = new TalonFX(Constants.ElbowMotorPort);
+    public WPI_TalonFX elbow = new WPI_TalonFX(Constants.ElbowMotorPort);
     private DigitalInput ElbowHome = new DigitalInput(Constants.ElbowHomeLimitSwitchPort);
     private DigitalInput ElbowFloor = new DigitalInput(Constants.ElbowFloorLimitSwitchPort);
     private DigitalInput ElbowLow = new DigitalInput(Constants.ElbowLowLimitSwitchPort);
     private DigitalInput ElbowHigh = new DigitalInput(Constants.ElbowHighLimitSwitchPort);
     private static Solenoid Wrist = new Solenoid(18, PneumaticsModuleType.CTREPCM, 6);
     private static Solenoid Fingers = new Solenoid(18, PneumaticsModuleType.CTREPCM, 4);
-
-
-    public enum Position {
-        Home,
-        Floor,
-        Low,
-        High,
-    }
-
-    private Position position = Position.Home;
-
-    public Position getPosition(){
-        return position;
-    }
-
-    public void setPosition(Position myPosition){
-        myPosition = position;
-    }
 
     public boolean isElbowHome(){
         return ElbowHome.get();
@@ -61,4 +42,11 @@ public class Elbow extends SubsystemBase {
         Wrist.toggle();
     }
     
+    public static void raiseWrist(){
+        Wrist.set(true);
+    }
+
+    public static void openFingers(){
+        Fingers.set(true);
+    }
 }

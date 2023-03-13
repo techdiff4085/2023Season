@@ -98,6 +98,7 @@ public class SwerveModule {
         mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
+        //clearing sticky faults at startup. 
         mAngleMotor.clearStickyFaults();
         resetToAbsolute();
     }
@@ -108,6 +109,7 @@ public class SwerveModule {
         mDriveMotor.setInverted(Constants.Swerve.driveMotorInvert);
         mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
         mDriveMotor.setSelectedSensorPosition(0);
+        //clearing sticky faults at startup. 
         mDriveMotor.clearStickyFaults();
     }
 

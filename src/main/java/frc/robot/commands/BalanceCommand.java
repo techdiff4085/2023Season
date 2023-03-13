@@ -10,8 +10,8 @@ public class BalanceCommand extends CommandBase {
     private Swerve m_Swerve;
 
     //private double error;
-    private double pitchCurrentAngle;
-    //private double rollCurrentAngle;
+    //private double pitchCurrentAngle;
+    private double rollCurrentAngle;
     //private double drivePower;
   
     public BalanceCommand(Swerve swerve) {
@@ -26,9 +26,10 @@ public class BalanceCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-      this.pitchCurrentAngle = m_Swerve.getPitch();
-      //this.rollCurrentAngle = m_Swerve.getRoll();
+      //this.pitchCurrentAngle = m_Swerve.getPitch();
+      this.rollCurrentAngle = m_Swerve.getRoll();
 
+      /*
       if (Math.abs(pitchCurrentAngle) > 2){
         if (this.pitchCurrentAngle < 0) {
           m_Swerve.drive(new Translation2d(0.1, 0.0), 0.0, false, false);
@@ -37,22 +38,24 @@ public class BalanceCommand extends CommandBase {
           m_Swerve.drive(new Translation2d(-0.1, 0.0), 0.0, false, false);
         }
       }
+      */
 
-      /* f (Math.abs (rollCurrentAngle) > 2){
+      if (Math.abs (rollCurrentAngle) > 2){
         if (this.rollCurrentAngle < 0){
           m_Swerve.drive(new Translation2d(0.0, -0.1), 0.0, false, false);
-      } 
-      else {
-        m_Swerve.drive(new Translation2d(0.0, 0.1), 0.0, false, false);
-      } */
+        } 
+        else {
+          m_Swerve.drive(new Translation2d(0.0, 0.1), 0.0, false, false);
+        } 
+      }
 
       //&& Math.abs(rollCurrentAngle) <= 2
 
-      if (Math.abs(pitchCurrentAngle) <= 2 ){
+      if (Math.abs(rollCurrentAngle) <= 2 ){
         m_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, false);
       }
        // Debugging Print Statments
-       SmartDashboard.putNumber("Current Pitch: ", pitchCurrentAngle);
+       SmartDashboard.putNumber("Current Roll: ", rollCurrentAngle);
     } 
 
      
