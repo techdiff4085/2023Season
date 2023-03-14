@@ -100,7 +100,7 @@ public class RobotContainer {
     private static NetworkTableEntry tx = table.getEntry("tx");
 
     /* Autonomous Commands */
-    private Command m_SideAutonomous = new SideAutonomous(s_Swerve);
+    private Command m_SideAutonomous = new SideAutonomous(s_Swerve, m_elbow, m_shoulder);
     private Command m_ChargeStationAutonomous = new SequentialCommandGroup(
         new ChargeStationAutonomous(s_Swerve),
         new BalanceCommand(s_Swerve)

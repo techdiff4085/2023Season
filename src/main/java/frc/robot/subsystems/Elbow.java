@@ -18,6 +18,14 @@ public class Elbow extends SubsystemBase {
     private static Solenoid Wrist = new Solenoid(18, PneumaticsModuleType.CTREPCM, 6);
     private static Solenoid Fingers = new Solenoid(18, PneumaticsModuleType.CTREPCM, 4);
 
+    public LastLimitSwitch lastLimitSwitch = null;
+    public enum LastLimitSwitch{
+        HIGH,
+        HOME,
+        MID,
+        FLOOR
+    }
+
     public boolean isElbowHome(){
         return ElbowHome.get();
     }

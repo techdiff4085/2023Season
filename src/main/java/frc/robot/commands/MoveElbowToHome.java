@@ -37,7 +37,6 @@ public class MoveElbowToHome extends CommandBase {
     } else {
       m_elbow.elbow.set(-m_speed);
     }
-    
   }
 
   // Called once the command ends or is interrupted.

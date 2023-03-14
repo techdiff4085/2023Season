@@ -28,6 +28,20 @@ public class ChargeStationAutonomous extends SequentialCommandGroup {
                     Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(Constants.Swerve.swerveKinematics);
 
+        Trajectory rotateTrajectory =
+                TrajectoryGenerator.generateTrajectory(
+                    // Start at the origin facing the +X direction
+                    new Pose2d(0, 0, new Rotation2d(0)),
+                    // Pass through these two interior waypoints, making an 's' curve path
+                    // 4 should be 18.8
+                    
+                    List.of(
+                    ), 
+                    // End 3 meters straight ahead of where we started, facing forward
+                    // good feetToMeters is 29 to get on charge station
+                    new Pose2d(0.25, Units.feetToMeters(0), new Rotation2d(Math.PI/2)),
+                    config);
+    
         // An example trajectory to follow.  All units in meters.
         Trajectory exampleTrajectory1 =
             TrajectoryGenerator.generateTrajectory(
@@ -55,7 +69,7 @@ public class ChargeStationAutonomous extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand =
             new SwerveControllerCommand(
-                exampleTrajectory1,
+                rotateTrajectory.concatenate(exampleTrajectory1),
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),

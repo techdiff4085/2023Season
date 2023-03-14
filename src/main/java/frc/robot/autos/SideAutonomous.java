@@ -16,9 +16,16 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Elbow;
+import frc.robot.subsystems.Shoulder;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.commands.MoveElbowToMid;
+import frc.robot.commands.MoveShoulderToMid;
+import frc.robot.commands.MoveElbowToHome;
+import frc.robot.commands.MoveShoulderToHome;
 
 public class SideAutonomous extends SequentialCommandGroup {
-    public SideAutonomous(Swerve s_Swerve){
+    public SideAutonomous(Swerve s_Swerve, Elbow m_elbow, Shoulder m_shoulder){
        
         TrajectoryConfig config =
             new TrajectoryConfig(
@@ -36,13 +43,11 @@ public class SideAutonomous extends SequentialCommandGroup {
                 // 4 should be 18.8
                 
                 List.of(
-                    new Translation2d(17, Units.feetToMeters(0)),
-                    new Translation2d(8, Units.feetToMeters(1))
 
                 ), 
                 // End 3 meters straight ahead of where we started, facing forward
                 // good feetToMeters is 29 to get on charge station
-                new Pose2d(-12, Units.feetToMeters(0), new Rotation2d(0)),
+                new Pose2d(-17, Units.feetToMeters(0.2), new Rotation2d(0)),
                 config);
 
         /* Trajectory exampleTrajectory2 =
@@ -79,6 +84,19 @@ public class SideAutonomous extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory1.getInitialPose())),
+
+            new ParallelCommandGroup(
+                new MoveElbowToMid (m_elbow, 0.1),
+                new MoveShoulderToMid (m_shoulder, 0.1)
+            ),
+
+            new InstantCommand(() -> Elbow.raiseWrist()),
+            new InstantCommand(() -> Elbow.openFingers()),
+
+            new ParallelCommandGroup(
+                new MoveElbowToHome (m_elbow, 0.1),
+                new MoveShoulderToHome (m_shoulder, 0.1)
+            ),
             swerveControllerCommand
         );
 
