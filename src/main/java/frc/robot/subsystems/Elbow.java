@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Solenoid;
@@ -18,7 +17,7 @@ public class Elbow extends SubsystemBase {
     private static Solenoid Wrist = new Solenoid(18, PneumaticsModuleType.CTREPCM, 6);
     private static Solenoid Fingers = new Solenoid(18, PneumaticsModuleType.CTREPCM, 4);
 
-    public LastLimitSwitch lastLimitSwitch = null;
+    public static LastLimitSwitch lastLimitSwitch = null;
     public enum LastLimitSwitch{
         HIGH,
         HOME,

@@ -22,10 +22,11 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.ChargeStationAutonomous;
 import frc.robot.autos.SideAutonomous;
+import frc.robot.autos.LeftChargeStationAuto;
 import frc.robot.commands.AimSwerveAtTagCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.MoveElbowToFloor;
-import frc.robot.commands.MoveElbowToHigh;
+
 import frc.robot.commands.MoveElbowToHome;
 import frc.robot.commands.MoveElbowToMid;
 import frc.robot.commands.MoveRobotCommand;
@@ -102,7 +103,11 @@ public class RobotContainer {
     /* Autonomous Commands */
     private Command m_SideAutonomous = new SideAutonomous(s_Swerve, m_elbow, m_shoulder);
     private Command m_ChargeStationAutonomous = new SequentialCommandGroup(
-        new ChargeStationAutonomous(s_Swerve),
+        new ChargeStationAutonomous(s_Swerve, m_elbow, m_shoulder),
+        new BalanceCommand(s_Swerve)
+    );
+    private Command m_LeftChargeStationAuto = new SequentialCommandGroup(
+        new LeftChargeStationAuto(s_Swerve, m_elbow, m_shoulder),
         new BalanceCommand(s_Swerve)
     );
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -140,11 +145,13 @@ public class RobotContainer {
         // A chooser for autonomous commands
         m_chooser.setDefaultOption("Side Auto", m_SideAutonomous);
         m_chooser.addOption("ChargeStationAuto", m_ChargeStationAutonomous);
+        m_chooser.addOption("LeftChargeStationAuto", m_LeftChargeStationAuto);
         
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);
 
         Position.setPosition(ArmPosition.Home);
+
     }
 
     /**
@@ -236,8 +243,11 @@ public class RobotContainer {
         armFloor.onTrue(
             new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                    new MoveElbowToFloor(m_elbow, 0.25),
-                    new MoveShoulderToHome(m_shoulder, 0.1)
+                    new MoveShoulderToHome(m_shoulder, 0.1),
+                    new SequentialCommandGroup(
+                        new WaitCommand(2),
+                        new MoveElbowToFloor(m_elbow, 0.25)                             
+                    )
                 ),
                 new InstantCommand(() -> Position.setPosition(ArmPosition.Floor))
             )
@@ -248,9 +258,9 @@ public class RobotContainer {
                 new ParallelCommandGroup(
                     new SequentialCommandGroup(
                         new WaitCommand(2),
-                        new MoveElbowToMid(m_elbow, 0.20)
+                        new MoveShoulderToMid(m_shoulder, 0.1)
                     ),
-                    new MoveShoulderToMid(m_shoulder, 0.1)
+                    new MoveElbowToMid(m_elbow, 0.20)                    
                 ),
                 new InstantCommand(() -> Position.setPosition(ArmPosition.Low))
             )
@@ -259,13 +269,16 @@ public class RobotContainer {
         DeliverMidCone.onTrue(
             new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                    new MoveElbowToMid(m_elbow, 0.20),
-                    new MoveShoulderToMid(m_shoulder, 0.1),
+                    new MoveShoulderToMid(m_shoulder, 0.15),
                     new SequentialCommandGroup(
-                        new WaitCommand(2.5),                       
-                        new InstantCommand(() -> Elbow.raiseWrist()),
-                        new WaitCommand(2),
-                        new InstantCommand(() -> Elbow.openFingers())                        
+                        new WaitCommand(1),    
+                        new MoveElbowToMid(m_elbow, 0.25)                            
+                    ),
+                    new SequentialCommandGroup(      
+                        new WaitCommand(1),                
+                        new InstantCommand(() -> Elbow.raiseWrist())
+                        //new WaitCommand(2),
+                        //new InstantCommand(() -> Elbow.openFingers())                        
                     )            
                 ),
                 new ParallelCommandGroup(
