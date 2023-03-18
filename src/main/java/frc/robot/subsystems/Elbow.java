@@ -2,9 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.Solenoid;
+//import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+//import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -14,8 +14,8 @@ public class Elbow extends SubsystemBase {
     private DigitalInput ElbowFloor = new DigitalInput(Constants.ElbowFloorLimitSwitchPort);
     private DigitalInput ElbowLow = new DigitalInput(Constants.ElbowLowLimitSwitchPort);
     private DigitalInput ElbowHigh = new DigitalInput(Constants.ElbowHighLimitSwitchPort);
-    private static Solenoid Wrist = new Solenoid(18, PneumaticsModuleType.CTREPCM, 6);
-    private static Solenoid Fingers = new Solenoid(18, PneumaticsModuleType.CTREPCM, 4);
+    //private static Solenoid Wrist = new Solenoid(18, PneumaticsModuleType.CTREPCM, 6);
+    //private static Solenoid Fingers = new Solenoid(18, PneumaticsModuleType.CTREPCM, 4);
 
     public static LastLimitSwitch lastLimitSwitch = null;
     public enum LastLimitSwitch{
@@ -30,7 +30,7 @@ public class Elbow extends SubsystemBase {
     }
 
     public boolean isElbowFloor(){
-        return ElbowFloor.get();
+            return ElbowFloor.get();
     }
 
     public boolean isElbowLow(){
@@ -41,19 +41,19 @@ public class Elbow extends SubsystemBase {
         return ElbowHigh.get();
     }
 
-    public static void toggleGrabber(){
-        Fingers.toggle();
-    }
+    //public static void toggleGrabber(){
+    //    Fingers.toggle();
+   // }
 
-    public static void toggleWrist(){
-        Wrist.toggle();
-    }
+    //public static void toggleWrist(){
+    //    Wrist.toggle();
+    //}
     
-    public static void raiseWrist(){
-        Wrist.set(true);
-    }
+    //public static void raiseWrist(){
+    //    Wrist.set(true);
+    //}
 
-    public static void openFingers(){
-        Fingers.set(true);
-    }
+    //public static void openFingers(){
+    //    Fingers.set(true);
+   // }
 }

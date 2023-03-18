@@ -44,6 +44,11 @@ public class MoveElbowToFloor extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_elbow.isElbowFloor();
+    if (m_elbow.isElbowFloor())
+      return false;
+    else  
+      return true;
+       
+    //return m_elbow.isElbowFloor();
   }
 }
