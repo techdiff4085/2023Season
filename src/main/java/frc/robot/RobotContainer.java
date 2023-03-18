@@ -28,6 +28,7 @@ import frc.robot.autos.DropOnlyCargoAuto;
 import frc.robot.autos.SideAutonomous;
 import frc.robot.autos.LeftChargeStationAuto;
 import frc.robot.autos.NoArmAutoSide;
+import frc.robot.autos.NoArmAutoSide1;
 import frc.robot.commands.AimSwerveAtTagCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.MoveElbowToFloor;
@@ -111,7 +112,11 @@ public class RobotContainer {
     private static NetworkTableEntry tx = table.getEntry("tx");
 
     /* Autonomous Commands */
-    private Command m_SideAutonomous = new SideAutonomous(s_Swerve, m_elbow, m_shoulder);
+    private Command m_SideAutonomous = new SequentialCommandGroup(
+        new SideAutonomous(s_Swerve, m_elbow, m_shoulder)
+
+    );
+         
     private Command m_ChargeStationAutonomous = new SequentialCommandGroup(
         new ChargeStationAutonomous(s_Swerve, m_elbow, m_shoulder),
         new BalanceCommand(s_Swerve)
@@ -122,9 +127,12 @@ public class RobotContainer {
     );
 
     private Command m_NoArmAuto = new SequentialCommandGroup(
-        new NoArmAutoSide(s_Swerve, m_elbow, m_shoulder),
-        new BalanceCommand(s_Swerve)
+        //new NoArmAutoSide(s_Swerve, m_elbow, m_shoulder)
+        new NoArmAutoSide1(s_Swerve, m_elbow, m_shoulder)
+        //new BalanceCommand(s_Swerve)
     );
+
+
     private Command m_DropOnlyCargoAuto = new SequentialCommandGroup(
         new DropOnlyCargoAuto(s_Swerve, m_elbow, m_shoulder)
 
@@ -137,6 +145,8 @@ public class RobotContainer {
         new DropMoveRightGoBack(s_Swerve, m_elbow, m_shoulder)
 
     );
+
+    
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     
@@ -163,7 +173,7 @@ public class RobotContainer {
                 s_Swerve, 
                 () -> -driver.getRawAxis(translationAxis)*Math.abs(driver.getRawAxis(translationAxis))/driverDivisor, 
                 () -> -driver.getRawAxis(strafeAxis)*Math.abs(driver.getRawAxis(strafeAxis))/driverDivisor, 
-                () -> -driver.getRawAxis(rotationAxis)/1.0, 
+                () -> -driver.getRawAxis(rotationAxis)/1.5, 
                 () -> false
             )
         );
@@ -177,8 +187,8 @@ public class RobotContainer {
        // m_chooser.addOption("LeftChargeStationAuto, Rotates then moves back", m_LeftChargeStationAuto);
         m_chooser.addOption("No Arm Auto Side, Only moves back", m_NoArmAuto);
         m_chooser.addOption("Drop Only Cargo. Does not Move.", m_DropOnlyCargoAuto);
-        m_chooser.addOption("Drop, Move to your Left, Go Back", m_DropMoveRightGoBack);
-        m_chooser.addOption("Drop, Move to your Right, Go Back", m_DropMoveLeftGoBack);
+        m_chooser.addOption("Drop, Moves to your Left, Goes Back", m_DropMoveRightGoBack);
+        m_chooser.addOption("Drop, Moves to your Right, Goes Back", m_DropMoveLeftGoBack);
 
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);
@@ -238,7 +248,7 @@ public class RobotContainer {
                     s_Swerve, 
                     () -> -driver.getRawAxis(translationAxis)*Math.abs(driver.getRawAxis(translationAxis))/driverDivisor, 
                     () -> -driver.getRawAxis(strafeAxis)*Math.abs(driver.getRawAxis(strafeAxis))/driverDivisor, 
-                    () -> -driver.getRawAxis(rotationAxis)/1.0, 
+                    () -> -driver.getRawAxis(rotationAxis)/1.5, 
                     () -> false
                 )
             );

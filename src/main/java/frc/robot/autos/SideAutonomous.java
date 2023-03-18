@@ -36,10 +36,10 @@ public class SideAutonomous extends SequentialCommandGroup {
                 new MoveShoulderToHome (m_shoulder, 0.2)
             
             ), 
-            //new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(.5),
-            //new MoveRobotSimple(s_Swerve, 0, 0, 90).withTimeout(.75),
-            new MoveRobotSimple(s_Swerve, 1, 0, 0).withTimeout(5),
-            new MoveRobotSimple(s_Swerve, 0, -1, 0).withTimeout(1)
+            new MoveRobotSimple(s_Swerve, -1.0, 0, 0).withTimeout(.5),
+            new MoveRobotSimple(s_Swerve, 0, 0, 180).withTimeout(1.5),
+            new MoveRobotSimple(s_Swerve, -1.0, 0, 0).withTimeout(5),
+            new MoveRobotSimple(s_Swerve, 0, -1.0, 0).withTimeout(1)
             //new BalanceCommand(s_Swerve)
         );
 

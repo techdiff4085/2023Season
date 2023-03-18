@@ -19,6 +19,8 @@ public class NoArmAutoSide extends SequentialCommandGroup {
     public NoArmAutoSide(Swerve s_Swerve, Elbow m_elbow, Shoulder m_shoulder){
         addCommands(
             new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
+            // don't use this. new MoveRobotSimple(s_Swerve, 1, 0, 0).withTimeout(5), // this goes forward
+            // don't use this. testing only. new MoveRobotSimple(s_Swerve, 0, 1, 0).withTimeout(5)
             new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(5)
             //new MoveRobotSimple(s_Swerve, 0, 0, 90).withTimeout(.75),
             //new MoveRobotSimple(s_Swerve, 0, 1, 0).withTimeout(5),

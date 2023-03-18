@@ -40,9 +40,9 @@ public class DropMoveRightGoBack extends SequentialCommandGroup {
              new MoveRobotSimple(s_Swerve, 0, -1, 0).withTimeout(2.5),
 
              // if the robot doesn't move 180, then remove the next line. 
-             //new MoveRobotSimple(s_Swerve, 0, 0, 180).withTimeout(.75),
+             new MoveRobotSimple(s_Swerve, 0, 0, 180).withTimeout(1.5),
              
-             new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(5)
+             new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(4.5)
         );
 
         
