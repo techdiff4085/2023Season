@@ -9,12 +9,13 @@ import frc.robot.Constants;
 public class Shoulder extends SubsystemBase {
 
     public WPI_TalonFX shoulder = new WPI_TalonFX(Constants.ShoulderMotorPort);
-    private DigitalInput ShoulderHome = new DigitalInput(Constants.ShoulderHomeLimitSwitchPort);
+    private DigitalInput ShoulderMid = new DigitalInput(Constants.ShoulderMidLimitSwitchPort);
     private DigitalInput ShoulderLow = new DigitalInput(Constants.ShoulderLowLimitSwitchPort);
     private DigitalInput ShoulderHigh = new DigitalInput(Constants.ShoulderHighLimitSwitchPort);
+    private DigitalInput ShoulderStart = new DigitalInput(Constants.ShoulderStartLimitSwitchPort);
 
-    public boolean isShoulderHome(){
-        return ShoulderHome.get();
+    public boolean isShoulderMid(){
+        return ShoulderMid.get();
     }
 
     public boolean isShoulderLow(){
@@ -23,6 +24,19 @@ public class Shoulder extends SubsystemBase {
 
     public boolean isShoulderHigh(){
         return ShoulderHigh.get();
+    }
+
+    public boolean isShoulderStart(){
+        return ShoulderStart.get();
+    }
+
+    public void moveShoulder(double speed){
+        shoulder.set(speed);
+    }
+
+    public double getEncoderPosition(){
+        return shoulder.getSelectedSensorPosition();
+        
     }
     
 }

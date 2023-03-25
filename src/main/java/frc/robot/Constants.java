@@ -30,13 +30,28 @@ public final class Constants {
     public static final int ShoulderHighLimitSwitchPort = 4; //#3
     public static final int ShoulderLowLimitSwitchPort = 5;
 
+    /* Arm Encoder position */
+    public static final double armRetractedPosition = 1000.1;
+    public static final double armExtendedPosition = 2000.1;
+    public static final double shoulderStartPosition = 2000;
+    public static final double shoulderHighPosition = 1000;
+    public static final double shoulderMidPosition = -1000;
+    public static final double shoulderLowPosition = -2000;
+
     /* Lidar */
     public static final int LidarPort = 0;
+
+    public static final int ShoulderStartLimitSwitchPort = 0;
+
+    public static final int ShoulderMidLimitSwitchPort = 0;
+
+    public static final int HandMotor = 0;
 
     public static final class Swerve {
         
         public static final int pigeonID = 20;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
+
 
         
 

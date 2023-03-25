@@ -5,10 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shoulder;
 
 /** An example command that uses an example subsystem. */
-public class MoveShoulderToHome extends CommandBase {
+public class MoveShoulderLow extends CommandBase {
   private final Shoulder m_shoulder;
   private final double m_speed;
   /**
@@ -16,7 +17,7 @@ public class MoveShoulderToHome extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveShoulderToHome(Shoulder subsystem, double speed) {
+  public MoveShoulderLow(Shoulder subsystem, double speed) {
     m_shoulder = subsystem;
     m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,7 +31,12 @@ public class MoveShoulderToHome extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shoulder.shoulder.set(-m_speed);
+    if (m_shoulder.getEncoderPosition() < Constants.shoulderLowPosition){
+      m_shoulder.shoulder.set(-m_speed);
+    }
+    else if (m_shoulder.getEncoderPosition() > Constants.shoulderLowPosition){
+      m_shoulder.shoulder.set(m_speed);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -42,6 +48,6 @@ public class MoveShoulderToHome extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_shoulder.isShoulderHome();
+    return m_shoulder.isShoulderLow() || m_shoulder.getEncoderPosition() == Constants.shoulderLowPosition;
   }
 }
