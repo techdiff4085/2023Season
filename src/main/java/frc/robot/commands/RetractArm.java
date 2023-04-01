@@ -8,6 +8,7 @@ import frc.robot.subsystems.Arm;
 public class RetractArm extends CommandBase {
   private final Arm m_Arm;
   private final double m_speed;
+
   /**
    * Creates a new ExampleCommand.
    *
@@ -22,19 +23,22 @@ public class RetractArm extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (m_Arm.getEncoderPosition() > Constants.armRetractedPosition){
-        m_Arm.Arm.set(-m_speed);
+      m_Arm.Arm.set(-m_speed);
     }
-    else if (m_Arm.getEncoderPosition() < Constants.armRetractedPosition){
+    else if (m_Arm.getEncoderPosition() < Constants.almostRetracted){
         m_Arm.Arm.set(m_speed);
     }
-    
-   
+    else if (m_Arm.getEncoderPosition() > Constants.almostRetracted){
+      m_Arm.Arm.set(.2);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -48,4 +52,5 @@ public class RetractArm extends CommandBase {
   public boolean isFinished() {
     return m_Arm.isArmRetracted();
   }
+
 }

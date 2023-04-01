@@ -26,19 +26,18 @@ public class MoveShoulderHigh extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if (m_shoulder.getEncoderPosition() < Constants.shoulderHighPosition){
+      m_shoulder.shoulder.set(m_speed);
+    }
+    else if (m_shoulder.getEncoderPosition() > Constants.shoulderHighPosition){
+      m_shoulder.shoulder.set(-m_speed);
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_shoulder.getEncoderPosition() < Constants.shoulderHighPosition){
-      m_shoulder.shoulder.set(-m_speed);
-    }
-    else if (m_shoulder.getEncoderPosition() > Constants.shoulderHighPosition){
-      m_shoulder.shoulder.set(m_speed);
-    }
-    
-   
   }
 
   // Called once the command ends or is interrupted.
@@ -50,6 +49,6 @@ public class MoveShoulderHigh extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_shoulder.isShoulderHigh() || m_shoulder.getEncoderPosition() == Constants.shoulderHighPosition;
+    return m_shoulder.isShoulderHigh();
   }
 }

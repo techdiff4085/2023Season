@@ -26,9 +26,12 @@ import frc.robot.autos.NoArmAutoSide1;
 import frc.robot.commands.AimSwerveAtTagCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.ExtendArm;
+import frc.robot.commands.MoveArm;
 import frc.robot.commands.MoveRobotCommand;
+import frc.robot.commands.MoveShoulder;
 import frc.robot.commands.MoveShoulderHigh;
 import frc.robot.commands.MoveShoulderLow;
+import frc.robot.commands.MoveShoulderMid;
 import frc.robot.commands.MoveShoulderStart;
 import frc.robot.commands.RetractArm;
 import frc.robot.commands.TeleopSwerve;
@@ -61,7 +64,7 @@ public class RobotContainer {
 
     /* Drive Assistant Controls */
     private final int shoulderAxis = XboxController.Axis.kLeftY.value;
-    private final int armAxis = XboxController.Axis.kLeftX.value;
+    private final int armAxis = XboxController.Axis.kRightY.value;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
@@ -83,6 +86,8 @@ public class RobotContainer {
     private final JoystickButton DeliverLow = new JoystickButton(armController, XboxController.Button.kB.value);
     private final JoystickButton PickupDropStation = new JoystickButton(armController, XboxController.Button.kLeftBumper.value);
     private final JoystickButton PickupLoadStation = new JoystickButton(armController, XboxController.Button.kRightBumper.value);
+    private final JoystickButton ChangeWrist = new JoystickButton(armController, XboxController.Button.kStart.value);
+    private final JoystickButton zeroArmAndShoulder = new JoystickButton(armController, XboxController.Button.kBack.value);
 
     //play music
     //private final JoystickButton playMusicButton = new JoystickButton(armController, XboxController.Button.kA.value);
@@ -165,11 +170,11 @@ public class RobotContainer {
         );
 
         m_shoulder.setDefaultCommand(
-            new InstantCommand(() -> m_shoulder.moveShoulder(armController.getRawAxis(-shoulderAxis)))
+            new MoveShoulder(m_shoulder, armController, shoulderAxis)
         );
 
         m_Arm.setDefaultCommand(
-            new InstantCommand(() -> m_Arm.moveArm(armController.getRawAxis(armAxis)))
+            new MoveArm(m_Arm, armController, armAxis)
         );
 
         // Configure the button bindings
@@ -218,45 +223,54 @@ public class RobotContainer {
 
         // Left Bumper Button 
         PickupDropStation.onTrue(new ParallelCommandGroup(
-            new MoveShoulderLow (m_shoulder, 0.1),
-            new InstantCommand(() -> Hand.Wrist.set(true)),
-            new RetractArm(m_Arm, 0.1)
+            new MoveShoulderLow (m_shoulder, 0.8),
+            //new InstantCommand(() -> Hand.Wrist.set(true)),
+            new RetractArm(m_Arm, 0.6)
         ));
 
         // Right Bumper Button
         PickupLoadStation.onTrue(new ParallelCommandGroup(
-            new MoveShoulderHigh (m_shoulder, 0.1),
-            new InstantCommand(() -> Hand.Wrist.set(false)),
-            new ExtendArm(m_Arm, 0.1)
+            new MoveShoulderHigh (m_shoulder, 0.8),
+            //new InstantCommand(() -> Hand.Wrist.set(false)),
+            new ExtendArm(m_Arm, 0.6)
         ));
 
         // A Button
-        Intake.whileTrue(new InstantCommand(() -> m_Hand.HandMotor.set(0.1)));
+        Intake.whileTrue(new InstantCommand(() -> m_Hand.HandMotor.set(0.25)));
+        Intake.onFalse(new InstantCommand(() -> m_Hand.HandMotor.set(0)));
         
         // Y Button
-        Outake.whileTrue(new InstantCommand(() -> m_Hand.HandMotor.set(-0.1)));
+        Outake.whileTrue(new InstantCommand(() -> m_Hand.HandMotor.set(-0.225)));
+        Outake.onFalse(new InstantCommand(() -> m_Hand.HandMotor.set(0)));
 
         // X Button
         DeliverMid.onTrue(new ParallelCommandGroup(
-            new MoveShoulderStart (m_shoulder, 0.1),
-            new InstantCommand(() -> Hand.Wrist.set(false)),
-            new ExtendArm(m_Arm, 0.1)
+            new MoveShoulderMid(m_shoulder, 0.8),
+            //new InstantCommand(() -> Hand.Wrist.set(false)),
+            new ExtendArm(m_Arm, 0.6)
         ));
 
         // B Button
         DeliverLow.onTrue(new ParallelCommandGroup(
-            new MoveShoulderLow (m_shoulder, 0.1),
-            new InstantCommand(() -> Hand.Wrist.set(false)),
-            new ExtendArm(m_Arm, 0.1)
+            new MoveShoulderLow (m_shoulder, 0.8),
+            //new InstantCommand(() -> Hand.Wrist.set(false)),
+            new ExtendArm(m_Arm, 0.6)
         ));
         
         /* Start Button */
+        ChangeWrist.onTrue(new InstantCommand(() -> Hand.Wrist.toggle()));
+
+        // Back Button
+        zeroArmAndShoulder.onTrue(new ParallelCommandGroup(
+            new InstantCommand(()-> m_shoulder.zeroEncoderPosition()),
+            new InstantCommand(()-> m_Arm.zeroEncoderPosition())
+        ));
 
         //Driver
         startPosition.onTrue(new ParallelCommandGroup(
-            new MoveShoulderStart (m_shoulder, 0.1),
-            new InstantCommand(() -> Hand.Wrist.set(false)),
-            new RetractArm(m_Arm, 0.1)
+            new MoveShoulderStart (m_shoulder, 0.8),
+            //new InstantCommand(() -> Hand.Wrist.set(false)),
+            new RetractArm(m_Arm, 0.6)
         ));
         //Shooter
         //grab.onTrue(new InstantCommand(() -> Elbow.toggleGrabber()));
