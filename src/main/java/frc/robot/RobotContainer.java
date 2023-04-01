@@ -146,7 +146,8 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-
+        m_Arm.zeroEncoderPosition();
+        m_shoulder.zeroEncoderPosition();
         CameraServer.startAutomaticCapture();
         //lights
         //candleConfig.stripType = LEDStripType.RGB;
