@@ -34,8 +34,22 @@ public class MoveArm extends CommandBase {
   @Override
   public void execute() {
     SmartDashboard.putNumber("Arm Encoder", m_Arm.getEncoderPosition());
-    System.out.println(m_controller.getRawAxis(m_axis));
-    m_Arm.Arm.set(m_controller.getRawAxis(m_axis));
+    double speed = m_controller.getRawAxis(m_axis);
+    if(speed > 0){ //we are retracting
+      if (m_Arm.getEncoderPosition() >= Constants.armRetractedPosition){
+        m_Arm.Arm.set(0);  
+      } else {
+        m_Arm.Arm.set(speed); 
+      }
+    } else if (speed < 0){
+      if (m_Arm.getEncoderPosition() < Constants.armExtendedPosition){
+        m_Arm.Arm.set(0);  
+      } else {
+        m_Arm.Arm.set(speed); 
+      }      
+    } else {
+      m_Arm.Arm.set(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

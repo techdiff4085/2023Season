@@ -6,22 +6,27 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.ChargeStationAutonomous;
+import frc.robot.autos.DropCube;
 import frc.robot.autos.DropMoveLeftGoBack;
 import frc.robot.autos.DropMoveRightGoBack;
 import frc.robot.autos.DropOnlyCargoAuto;
-import frc.robot.autos.SideAutonomous;
 import frc.robot.autos.LeftChargeStationAuto;
+import frc.robot.autos.MidConeDeliverSide;
 import frc.robot.autos.NoArmAutoSide1;
 import frc.robot.commands.AimSwerveAtTagCommand;
 import frc.robot.commands.BalanceCommand;
@@ -29,10 +34,12 @@ import frc.robot.commands.ExtendArm;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.MoveRobotCommand;
 import frc.robot.commands.MoveShoulder;
+import frc.robot.commands.MoveShoulderDeliverHigh;
 import frc.robot.commands.MoveShoulderHigh;
 import frc.robot.commands.MoveShoulderLow;
 import frc.robot.commands.MoveShoulderMid;
 import frc.robot.commands.MoveShoulderStart;
+import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractArm;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Arm;
@@ -48,9 +55,13 @@ import frc.robot.subsystems.Swerve;
  */
 public class RobotContainer {
     //lights
+    public static Spark light = new Spark(8);
+    private boolean isPurple = true;
+    private boolean isSolid = true;
+
+    //private static I2C m_lidar = new I2C(I2C.Port.kOnboard, 0x30);
     //private static CANdle candle = new CANdle(40, "Carnie");
     //private static CANdleConfiguration candleConfig = new CANdleConfiguration();
-    private static boolean isPurple = true;
 
     /* Controllers */
     private final Joystick driver = new Joystick(Constants.DriverJoystickPort);
@@ -60,7 +71,7 @@ public class RobotContainer {
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
-    public static double driverDivisor = 1.0;
+    public static double driverDivisor = Constants.fastSpeed;
 
     /* Drive Assistant Controls */
     private final int shoulderAxis = XboxController.Axis.kLeftY.value;
@@ -72,10 +83,9 @@ public class RobotContainer {
     private final JoystickButton aimRobotAtTag = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton moveRobotLeft = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton moveRobotRight = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton moveRobotLeftOuter = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton moveRobotRightOuter = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton slowFast = new JoystickButton(driver, XboxController.Button.kBack.value);
-    private final JoystickButton startPosition = new JoystickButton(driver, XboxController.Button.kStart.value);
+    private final JoystickButton fullPowerOuttake = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton togglePattern = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton slowFast = new JoystickButton(driver, XboxController.Button.kStart.value);
     //private final JoystickButton resetPositionButton = new JoystickButton(driver, XboxController.Button.kBack.value);
 
 
@@ -83,11 +93,14 @@ public class RobotContainer {
     private final JoystickButton Intake = new JoystickButton(armController, XboxController.Button.kA.value);
     private final JoystickButton Outake = new JoystickButton(armController, XboxController.Button.kY.value);
     private final JoystickButton DeliverMid = new JoystickButton(armController, XboxController.Button.kX.value);
-    private final JoystickButton DeliverLow = new JoystickButton(armController, XboxController.Button.kB.value);
+   // private final JoystickButton DeliverLow = new JoystickButton(armController, XboxController.Button.kB.value);
     private final JoystickButton PickupDropStation = new JoystickButton(armController, XboxController.Button.kLeftBumper.value);
     private final JoystickButton PickupLoadStation = new JoystickButton(armController, XboxController.Button.kRightBumper.value);
-    private final JoystickButton ChangeWrist = new JoystickButton(armController, XboxController.Button.kStart.value);
-    private final JoystickButton zeroArmAndShoulder = new JoystickButton(armController, XboxController.Button.kBack.value);
+    private final JoystickButton ChangeWrist = new JoystickButton(armController, XboxController.Button.kB.value);
+    //private final JoystickButton zeroArmAndShoulder = new JoystickButton(armController, XboxController.Button.kBack.value);
+    private final JoystickButton deliverHigh = new JoystickButton(armController, XboxController.Button.kBack.value);
+    private final JoystickButton startPosition = new JoystickButton(armController, XboxController.Button.kStart.value);
+    //private final JoystickButton readLidar = new JoystickButton(armController, XboxController.Button.kStart.value);
 
     //play music
     //private final JoystickButton playMusicButton = new JoystickButton(armController, XboxController.Button.kA.value);
@@ -104,19 +117,24 @@ public class RobotContainer {
     private static NetworkTableEntry tx = table.getEntry("tx");
 
     /* Autonomous Commands */
-    private Command m_SideAutonomous = new SequentialCommandGroup(
-        new SideAutonomous(s_Swerve, m_Arm, m_shoulder)
-
+    private Command m_DropCube = new SequentialCommandGroup(
+        new DropCube(s_Swerve, m_Hand, m_Arm, m_shoulder),
+        new BalanceCommand(s_Swerve)
     );
          
     private Command m_ChargeStationAutonomous = new SequentialCommandGroup(
-        new ChargeStationAutonomous(s_Swerve, m_Hand, m_Arm, m_shoulder),
+        new ChargeStationAutonomous(s_Swerve, m_Hand, m_Arm, m_shoulder, light),
         new BalanceCommand(s_Swerve)
     );
+    /*
     private Command m_LeftChargeStationAuto = new SequentialCommandGroup(
-        new LeftChargeStationAuto(s_Swerve, m_Arm, m_shoulder),
+        new LeftChargeStationAuto(s_Swerve, m_Hand, m_Arm, m_shoulder),
         new BalanceCommand(s_Swerve)
     );
+    */
+    private Command m_LeftChargeStationAuto = new LeftChargeStationAuto(s_Swerve, m_Hand, m_Arm, m_shoulder, light);
+
+    private Command m_MidConeDeliverSide = new MidConeDeliverSide(s_Swerve, m_Hand, m_Arm, m_shoulder, light);
 
     private Command m_NoArmAuto = new SequentialCommandGroup(
         //new NoArmAutoSide(s_Swerve, m_elbow, m_shoulder)
@@ -137,6 +155,7 @@ public class RobotContainer {
         new DropMoveRightGoBack(s_Swerve, m_Hand, m_Arm, m_shoulder)
     );
 
+
     
     private static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -145,6 +164,10 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+
+        //Turn the limelight LED off.
+        //DEFAULT(0), OFF(1), BLINK(2), ON(3);
+        table.getEntry("ledMode").setNumber(1);
 
         m_Arm.zeroEncoderPosition();
         m_shoulder.zeroEncoderPosition();
@@ -158,17 +181,18 @@ public class RobotContainer {
        // Limelight.getInstance();
        //https://docs.limelightvision.io/en/latest/getting_started.html#basic-programming
        //   Number 1 turns off the light; 2 blinks; 3 turns on; 
-       table.getInstance().getEntry("ledMode").setNumber(1);
 
+       table.getInstance().getEntry("ledMode").setNumber(1);
         s_Swerve.setDefaultCommand(
             new TeleopSwerve( 
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis)*Math.abs(driver.getRawAxis(translationAxis))/driverDivisor, 
-                () -> -driver.getRawAxis(strafeAxis)*Math.abs(driver.getRawAxis(strafeAxis))/driverDivisor, 
+                () -> -getTranslationSpeed(), 
+                () -> -getStrafeSpeed(), 
                 () -> -driver.getRawAxis(rotationAxis)/1.5, 
                 () -> false
             )
         );
+        
 
         m_shoulder.setDefaultCommand(
             new MoveShoulder(m_shoulder, armController, shoulderAxis)
@@ -182,16 +206,26 @@ public class RobotContainer {
         configureButtonBindings();
 
         // A chooser for autonomous commands
-        m_chooser.setDefaultOption("Far Side Auto, Does Not Rotate Now, Moves back", m_SideAutonomous);
-        m_chooser.addOption("Charge Station Balance Auto", m_ChargeStationAutonomous);
+        m_chooser.setDefaultOption("Charge Station Balance Auto", m_ChargeStationAutonomous);
+        m_chooser.addOption("Drop cone High, Goes Back", m_LeftChargeStationAuto);
+        m_chooser.addOption("Drop cone Mid, Goes Back", m_MidConeDeliverSide);
+        m_chooser.addOption("Just Drop Cube, Goes Back (no arm)", m_DropCube);
+        /*
+        m_chooser.addOption("Far Side Auto, Does Not Rotate Now, Moves back", m_SideAutonomous);
        // m_chooser.addOption("LeftChargeStationAuto, Rotates then moves back", m_LeftChargeStationAuto);
         m_chooser.addOption("No Arm Auto Side, Only moves back", m_NoArmAuto);
         m_chooser.addOption("Drop Only Cargo. Does not Move.", m_DropOnlyCargoAuto);
         m_chooser.addOption("Drop, Moves to your Left, Goes Back", m_DropMoveRightGoBack);
-        m_chooser.addOption("Drop, Moves to your Right, Goes Back", m_DropMoveLeftGoBack);
+        
+*/
 
         // Put the chooser on the dashboard
         SmartDashboard.putData("Autonomous choices", m_chooser);
+    }
+
+    public void zeroArmAndShoulder(){
+        m_Arm.zeroEncoderPosition();
+        m_shoulder.zeroEncoderPosition();
     }
 
     /**
@@ -217,7 +251,19 @@ public class RobotContainer {
         /* Right bumper Button */
 
         //Driver
-        moveRobotRightOuter.onTrue(new MoveRobotCommand(s_Swerve, 4));
+        fullPowerOuttake.whileTrue(new InstantCommand(() -> m_Hand.HandMotor.set(-1)));
+        fullPowerOuttake.onFalse(new InstantCommand(() -> m_Hand.HandMotor.set(0)));
+        
+        togglePattern.onTrue(new InstantCommand(() -> {
+            isPurple = !isPurple;
+            if (isPurple){
+                light.set(0.91);
+            }
+            else {
+                light.set(0.67);
+            }          
+        }));
+        
 
         /* Shooter */
         //toggleWrist.onTrue(new InstantCommand(() -> Elbow.toggleWrist()));
@@ -225,63 +271,71 @@ public class RobotContainer {
         // Left Bumper Button 
         PickupDropStation.onTrue(new ParallelCommandGroup(
             new MoveShoulderLow (m_shoulder, 0.8),
-            //new InstantCommand(() -> Hand.Wrist.set(true)),
-            new RetractArm(m_Arm, 0.6)
+            new RetractArm(m_Arm, 0.7)
         ));
 
         // Right Bumper Button
         PickupLoadStation.onTrue(new ParallelCommandGroup(
             new MoveShoulderHigh (m_shoulder, 0.8),
-            //new InstantCommand(() -> Hand.Wrist.set(false)),
-            new ExtendArm(m_Arm, 0.6)
+            new ExtendArm(m_Arm, 0.7)
         ));
 
         // A Button
-        Intake.whileTrue(new InstantCommand(() -> m_Hand.HandMotor.set(0.25)));
-        Intake.onFalse(new InstantCommand(() -> m_Hand.HandMotor.set(0)));
+        Intake.whileTrue(new OuttakeCommand(m_Hand, 0.4));
+        Intake.onFalse(new InstantCommand(() -> m_Hand.HandMotor.neutralOutput()));
         
         // Y Button
-        Outake.whileTrue(new InstantCommand(() -> m_Hand.HandMotor.set(-0.225)));
+        Outake.whileTrue(new InstantCommand(() -> m_Hand.HandMotor.set(-0.4)));
         Outake.onFalse(new InstantCommand(() -> m_Hand.HandMotor.set(0)));
 
         // X Button
         DeliverMid.onTrue(new ParallelCommandGroup(
-            new MoveShoulderMid(m_shoulder, 0.8),
-            //new InstantCommand(() -> Hand.Wrist.set(false)),
-            new ExtendArm(m_Arm, 0.6)
+            new SequentialCommandGroup(
+                new WaitCommand(2),
+                new MoveShoulderMid(m_shoulder, 0.8)                
+            ),
+            new ExtendArm(m_Arm, 0.7)
         ));
 
         // B Button
+        ChangeWrist.onTrue(new InstantCommand(() -> Hand.Wrist.toggle()));
+
+        //Start
+        //readLidar.whileTrue(new InstantCommand(() -> SmartDashboard.putNumber("Lidar", m_lidar.getValue())));
+      
+        
+        /* Start Button 
         DeliverLow.onTrue(new ParallelCommandGroup(
             new MoveShoulderLow (m_shoulder, 0.8),
             //new InstantCommand(() -> Hand.Wrist.set(false)),
             new ExtendArm(m_Arm, 0.6)
-        ));
-        
-        /* Start Button */
-        ChangeWrist.onTrue(new InstantCommand(() -> Hand.Wrist.toggle()));
+        ));*/
 
         // Back Button
+        deliverHigh.onTrue(new ParallelCommandGroup(
+            new MoveShoulderDeliverHigh(m_shoulder, 0.8),
+            new ExtendArm(m_Arm, 0.7)
+        ));
+        /*
         zeroArmAndShoulder.onTrue(new ParallelCommandGroup(
             new InstantCommand(()-> m_shoulder.zeroEncoderPosition()),
             new InstantCommand(()-> m_Arm.zeroEncoderPosition())
-        ));
+        )); */
 
         //Driver
         startPosition.onTrue(new ParallelCommandGroup(
             new MoveShoulderStart (m_shoulder, 0.8),
-            //new InstantCommand(() -> Hand.Wrist.set(false)),
-            new RetractArm(m_Arm, 0.6)
+            new RetractArm(m_Arm, 0.7)
         ));
         //Shooter
         //grab.onTrue(new InstantCommand(() -> Elbow.toggleGrabber()));
 
 
         slowFast.onTrue(new InstantCommand(() -> {
-            if(driverDivisor == 1.0 ){
-                driverDivisor = 1.5;
+            if(driverDivisor == Constants.fastSpeed ){
+                driverDivisor = Constants.slowSpeed;
             } else {
-                driverDivisor = 1.0;
+                driverDivisor = Constants.fastSpeed;
             }
             s_Swerve.setDefaultCommand(
                 new TeleopSwerve( 
@@ -294,9 +348,28 @@ public class RobotContainer {
             );
         }));
 
+
         
     }
 
+    private double getTranslationSpeed(){
+        double speed = driver.getRawAxis(translationAxis)*Math.abs(driver.getRawAxis(translationAxis))/driverDivisor;
+        if (m_Arm.getEncoderPosition() < Constants.armExtendedPosition/2){
+            return Math.min(speed, 0.75);
+        } else {
+            return speed;
+        }
+    }
+
+    private double getStrafeSpeed(){
+        double speed = driver.getRawAxis(strafeAxis)*Math.abs(driver.getRawAxis(strafeAxis))/driverDivisor;
+        if (m_Arm.getEncoderPosition() < Constants.armExtendedPosition/2){
+            return Math.min(speed, 0.75);
+        } else {
+            return speed;
+        }
+    }
+    
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *

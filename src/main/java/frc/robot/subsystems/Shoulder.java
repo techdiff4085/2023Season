@@ -35,6 +35,7 @@ public class Shoulder extends SubsystemBase {
 
     public double getEncoderPosition(){
         SmartDashboard.putNumber("Shoulder Encoder", sensor.getIntegratedSensorPosition());
+        SmartDashboard.putNumber("Shoulder Voltage", shoulder.getMotorOutputVoltage());
         return sensor.getIntegratedSensorPosition();
         
     }

@@ -9,15 +9,16 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Shoulder;
 
 /** An example command that uses an example subsystem. */
-public class MoveShoulderLow extends CommandBase {
+public class MoveShoulderDeliverHigh extends CommandBase {
   private final Shoulder m_shoulder;
   private final double m_speed;
+  public boolean isLowering;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveShoulderLow(Shoulder subsystem, double speed) {
+  public MoveShoulderDeliverHigh(Shoulder subsystem, double speed) {
     m_shoulder = subsystem;
     m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -27,15 +28,19 @@ public class MoveShoulderLow extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (m_shoulder.getEncoderPosition() < Constants.shoulderDeliverHighPosition){
+      isLowering = true;
       m_shoulder.shoulder.set(m_speed);
+    }
+    else if (m_shoulder.getEncoderPosition() > Constants.shoulderDeliverHighPosition){
+      isLowering = false;
+      m_shoulder.shoulder.set(-m_speed);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_shoulder.getEncoderPosition() > Constants.almostLow){
-      m_shoulder.shoulder.set(0.2);
-    }
   }
 
   // Called once the command ends or is interrupted.
@@ -47,6 +52,10 @@ public class MoveShoulderLow extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_shoulder.getEncoderPosition() > Constants.shoulderLowPosition;
+    if (isLowering){
+      return m_shoulder.getEncoderPosition() > Constants.shoulderDeliverHighPosition;
+    } else {
+      return m_shoulder.getEncoderPosition() < Constants.shoulderDeliverHighPosition;
+    }
   }
 }

@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Swerve;
 
 public class BalanceCommand extends CommandBase {
@@ -10,7 +11,7 @@ public class BalanceCommand extends CommandBase {
     private Swerve m_Swerve;
 
     //private double error;
-    //private double pitchCurrentAngle;
+    private double pitchCurrentAngle;
     private double rollCurrentAngle;
     //private double drivePower;
   
@@ -26,20 +27,22 @@ public class BalanceCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-      //this.pitchCurrentAngle = m_Swerve.getPitch();
-      this.rollCurrentAngle = m_Swerve.getRoll();
+      this.pitchCurrentAngle = m_Swerve.getPitch();
+      //this.rollCurrentAngle = m_Swerve.getRoll();
 
-      /*
+      
       if (Math.abs(pitchCurrentAngle) > 2){
         if (this.pitchCurrentAngle < 0) {
-          m_Swerve.drive(new Translation2d(0.1, 0.0), 0.0, false, false);
+          m_Swerve.drive(new Translation2d(0.05, 0.0), 0.0, false, false);
         }
         else{
-          m_Swerve.drive(new Translation2d(-0.1, 0.0), 0.0, false, false);
+          m_Swerve.drive(new Translation2d(-0.05, 0.0), 0.0, false, false);
         }
+      } else {
+        m_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, false);
       }
-      */
-
+      
+/*
       if (Math.abs (rollCurrentAngle) > 2){
         if (this.rollCurrentAngle < 0){
           m_Swerve.drive(new Translation2d(0.0, -0.1), 0.0, false, false);
@@ -49,13 +52,15 @@ public class BalanceCommand extends CommandBase {
         } 
       }
 
-      //&& Math.abs(rollCurrentAngle) <= 2
-
+      
       if (Math.abs(rollCurrentAngle) <= 2 ){
         m_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, false);
+        // change blinkin to -.05 which is a white strobe light when balanced
+        RobotContainer.light.set(-.05);
       }
        // Debugging Print Statments
        SmartDashboard.putNumber("Current Roll: ", rollCurrentAngle);
+       */
     } 
 
      
