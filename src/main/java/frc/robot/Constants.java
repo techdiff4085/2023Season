@@ -40,7 +40,7 @@ public final class Constants {
     public static final double armExtendedPosition = -465377;
     public static final double shoulderStartPosition = 0;
     public static final double shoulderHighPosition = 137839;
-    public static final double shoulderDeliverHighPosition = 272018;
+    public static final double shoulderDeliverHighPosition = 262018;
     public static final double shoulderMidPosition = 255751; 
     public static final double almostLow = 400000;
     public static final double shoulderLowPosition = 443684;
@@ -186,8 +186,8 @@ public final class Constants {
     }
 
     public static final class AutoConstants { //The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 4;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 4;
+        public static final double kMaxSpeedMetersPerSecond = 6;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 6;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     

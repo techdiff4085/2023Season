@@ -34,7 +34,7 @@ public class OuttakeCommand extends CommandBase {
     } else {
       m_Hand.HandMotor.set(m_speed);
     }
-    SmartDashboard.putNumber("Hand Voltage", m_Hand.HandMotor.getMotorOutputVoltage());
+    //SmartDashboard.putNumber("Hand Voltage", m_Hand.HandMotor.getMotorOutputVoltage());
 
   }
 

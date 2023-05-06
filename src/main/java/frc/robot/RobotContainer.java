@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.autos.Center930;
+import frc.robot.autos.ChargeStationAutoMid;
 import frc.robot.autos.ChargeStationAutonomous;
 import frc.robot.autos.DropCube;
 import frc.robot.autos.DropMoveLeftGoBack;
@@ -126,6 +128,16 @@ public class RobotContainer {
         new ChargeStationAutonomous(s_Swerve, m_Hand, m_Arm, m_shoulder, light),
         new BalanceCommand(s_Swerve)
     );
+
+    private Command m_ChargeStationAutonomousMid = new SequentialCommandGroup(
+        new ChargeStationAutoMid(s_Swerve, m_Hand, m_Arm, m_shoulder, light),
+        new BalanceCommand(s_Swerve)
+    );
+
+    private Command m_Center930 = new SequentialCommandGroup(
+        new Center930(s_Swerve, m_Hand, m_Arm, m_shoulder, light),
+        new BalanceCommand(s_Swerve)
+    );
     /*
     private Command m_LeftChargeStationAuto = new SequentialCommandGroup(
         new LeftChargeStationAuto(s_Swerve, m_Hand, m_Arm, m_shoulder),
@@ -206,10 +218,12 @@ public class RobotContainer {
         configureButtonBindings();
 
         // A chooser for autonomous commands
-        m_chooser.setDefaultOption("Charge Station Balance Auto", m_ChargeStationAutonomous);
+        m_chooser.setDefaultOption("Charge Station High Balance Auto", m_ChargeStationAutonomous);
+        m_chooser.addOption("Charge Station Mid Balance Auto", m_ChargeStationAutonomousMid);
         m_chooser.addOption("Drop cone High, Goes Back", m_LeftChargeStationAuto);
         m_chooser.addOption("Drop cone Mid, Goes Back", m_MidConeDeliverSide);
         m_chooser.addOption("Just Drop Cube, Goes Back (no arm)", m_DropCube);
+        m_chooser.addOption("930 auto command red", m_Center930);
         /*
         m_chooser.addOption("Far Side Auto, Does Not Rotate Now, Moves back", m_SideAutonomous);
        // m_chooser.addOption("LeftChargeStationAuto, Rotates then moves back", m_LeftChargeStationAuto);

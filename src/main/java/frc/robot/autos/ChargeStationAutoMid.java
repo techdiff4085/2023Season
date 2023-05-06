@@ -15,33 +15,42 @@ import frc.robot.subsystems.Shoulder;
 import frc.robot.subsystems.Swerve;
 import frc.robot.commands.MoveRobotSimple;
 import frc.robot.commands.MoveShoulderDeliverHigh;
+import frc.robot.commands.MoveShoulderMid;
 import frc.robot.commands.MoveShoulderStart;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractArm;
 
-public class ChargeStationAutonomous extends SequentialCommandGroup {
-    public ChargeStationAutonomous(Swerve s_Swerve, Hand m_Hand, Arm m_Arm, Shoulder m_shoulder, Spark light){
+public class ChargeStationAutoMid extends SequentialCommandGroup {
+    public ChargeStationAutoMid(Swerve s_Swerve, Hand m_Hand, Arm m_Arm, Shoulder m_shoulder, Spark light){
 
         addCommands(
             new InstantCommand(() -> m_Arm.zeroEncoderPosition()),
             new InstantCommand(() -> m_shoulder.zeroEncoderPosition()),
             new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
-            new InstantCommand(() -> light.set(0.91)),//violet
+            new InstantCommand(() -> light.set(0.91)),//violet            
             new ParallelCommandGroup(
-                new OuttakeCommand(m_Hand, 0.4).withTimeout(1.5),
-                new MoveShoulderDeliverHigh(m_shoulder, 0.8),
-                new ExtendArm(m_Arm, 0.7)
+                new SequentialCommandGroup(
+                    new OuttakeCommand(m_Hand, 0.4).withTimeout(0.5),
+                    new OuttakeCommand(m_Hand, 0).withTimeout(0.1)    
+                ),
+                new SequentialCommandGroup(
+                    new WaitCommand(2),
+                    new MoveShoulderMid(m_shoulder, 0.8)                
+                ),
+                new ExtendArm(m_Arm, 0.7),
+                new InstantCommand(() -> Hand.Wrist.toggle())
             ),
-            
             new OuttakeCommand(m_Hand, -0.4).withTimeout(0.5),
-            new InstantCommand(() -> m_Hand.HandMotor.set(0)),
+            new InstantCommand(() -> m_Hand.HandMotor.set(0)),                        
             new ParallelCommandGroup(
                 new RetractArm(m_Arm, 0.7),
                 new MoveShoulderStart(m_shoulder, 0.8),
                 new SequentialCommandGroup(
-                    new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(5.1),
+                    new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(2.0),
                     new WaitCommand(0.5),
-                    new MoveRobotSimple(s_Swerve, 1, 0, 0).withTimeout(2.5),
+                    new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(2.9),
+                    new WaitCommand(1),
+                    new MoveRobotSimple(s_Swerve, 1, 0, 0).withTimeout(2.3),
                     new BalanceCommand(s_Swerve),
                     new BalanceCommand(s_Swerve),
                     new BalanceCommand(s_Swerve),

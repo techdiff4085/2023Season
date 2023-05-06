@@ -28,9 +28,8 @@ public class BalanceCommand extends CommandBase {
     @Override
     public void execute() {
       this.pitchCurrentAngle = m_Swerve.getPitch();
-      //this.rollCurrentAngle = m_Swerve.getRoll();
+      this.rollCurrentAngle = m_Swerve.getRoll();
 
-      
       if (Math.abs(pitchCurrentAngle) > 2){
         if (this.pitchCurrentAngle < 0) {
           m_Swerve.drive(new Translation2d(0.05, 0.0), 0.0, false, false);
@@ -45,14 +44,17 @@ public class BalanceCommand extends CommandBase {
 /*
       if (Math.abs (rollCurrentAngle) > 2){
         if (this.rollCurrentAngle < 0){
-          m_Swerve.drive(new Translation2d(0.0, -0.1), 0.0, false, false);
+          m_Swerve.drive(new Translation2d(0.0, -0.5), 0.0, false, false);
         } 
         else {
-          m_Swerve.drive(new Translation2d(0.0, 0.1), 0.0, false, false);
+          m_Swerve.drive(new Translation2d(0.0, 0.5), 0.0, false, false);
         } 
+      } else {
+         m_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, false);
       }
+*/
 
-      
+/*    
       if (Math.abs(rollCurrentAngle) <= 2 ){
         m_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, false, false);
         // change blinkin to -.05 which is a white strobe light when balanced

@@ -19,8 +19,8 @@ import frc.robot.commands.MoveShoulderStart;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractArm;
 
-public class ChargeStationAutonomous extends SequentialCommandGroup {
-    public ChargeStationAutonomous(Swerve s_Swerve, Hand m_Hand, Arm m_Arm, Shoulder m_shoulder, Spark light){
+public class Center930 extends SequentialCommandGroup {
+    public Center930(Swerve s_Swerve, Hand m_Hand, Arm m_Arm, Shoulder m_shoulder, Spark light){
 
         addCommands(
             new InstantCommand(() -> m_Arm.zeroEncoderPosition()),
@@ -28,6 +28,7 @@ public class ChargeStationAutonomous extends SequentialCommandGroup {
             new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)))),
             new InstantCommand(() -> light.set(0.91)),//violet
             new ParallelCommandGroup(
+                new InstantCommand(() -> Hand.Wrist.set(false)),
                 new OuttakeCommand(m_Hand, 0.4).withTimeout(1.5),
                 new MoveShoulderDeliverHigh(m_shoulder, 0.8),
                 new ExtendArm(m_Arm, 0.7)
@@ -39,12 +40,11 @@ public class ChargeStationAutonomous extends SequentialCommandGroup {
                 new RetractArm(m_Arm, 0.7),
                 new MoveShoulderStart(m_shoulder, 0.8),
                 new SequentialCommandGroup(
-                    new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(5.1),
-                    new WaitCommand(0.5),
-                    new MoveRobotSimple(s_Swerve, 1, 0, 0).withTimeout(2.5),
-                    new BalanceCommand(s_Swerve),
-                    new BalanceCommand(s_Swerve),
-                    new BalanceCommand(s_Swerve),
+                    new WaitCommand(6),
+                    new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(0.2),
+                    new MoveRobotSimple(s_Swerve, 0, 1, 0).withTimeout(2.5),
+                    new MoveRobotSimple(s_Swerve, -1, 0, 0).withTimeout(3.5),
+                    new BalanceCommand(s_Swerve), 
                     new InstantCommand(() -> light.set(0.21))//light chase
                 )                
             )

@@ -84,7 +84,7 @@ public class Swerve extends SubsystemBase {
 
     public Pose2d getPose() {
         Pose2d pose = swerveOdometry.getPoseMeters();
-        SmartDashboard.putString("pose", pose.toString());
+        //SmartDashboard.putString("pose", pose.toString());
         return pose;
     }
 
@@ -141,12 +141,14 @@ public class Swerve extends SubsystemBase {
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+            /*
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
             SmartDashboard.putString("Mod" + mod.moduleNumber + "Sticky Fault", mod.getStickyFault());  
             SmartDashboard.putNumber("Mod" + mod.moduleNumber + " getSelectedSensorPosition is", mod.getSelectedSensorPosition());
             SmartDashboard.putNumber("Mod" + mod.moduleNumber + " drive motor temperature is", mod.getDriveMotorTemperature());
             SmartDashboard.putNumber("Mod" + mod.moduleNumber + " angle motor temperature is", mod.getAngleMotorTemperature());
+            */
         }
     }
 
